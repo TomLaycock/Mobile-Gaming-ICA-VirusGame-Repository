@@ -17,6 +17,7 @@
 		4A5C2CB3255445260014BC95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A5C2CB1255445260014BC95 /* LaunchScreen.storyboard */; };
 		4A5C2CBE255445260014BC95 /* Mobile_Gaming_ICA___VirusGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5C2CBD255445260014BC95 /* Mobile_Gaming_ICA___VirusGameTests.swift */; };
 		4A5C2CC9255445270014BC95 /* Mobile_Gaming_ICA___VirusGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5C2CC8255445270014BC95 /* Mobile_Gaming_ICA___VirusGameUITests.swift */; };
+		4ACAABE32566B926004FF3EB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACAABE22566B925004FF3EB /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		4A5C2CC8255445270014BC95 /* Mobile_Gaming_ICA___VirusGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mobile_Gaming_ICA___VirusGameUITests.swift"; sourceTree = "<group>"; };
 		4A5C2CCA255445270014BC95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A5C2CD62554587A0014BC95 /* Mobile Gaming ICA - VirusGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mobile Gaming ICA - VirusGame.entitlements"; sourceTree = "<group>"; };
+		4ACAABE22566B925004FF3EB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4ACAABE32566B926004FF3EB /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +91,7 @@
 				4A5C2CBC255445260014BC95 /* Mobile Gaming ICA - VirusGameTests */,
 				4A5C2CC7255445270014BC95 /* Mobile Gaming ICA - VirusGameUITests */,
 				4A5C2CA0255445230014BC95 /* Products */,
+				4ACAABE12566B925004FF3EB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,6 +108,7 @@
 		4A5C2CA1255445230014BC95 /* Mobile Gaming ICA - VirusGame */ = {
 			isa = PBXGroup;
 			children = (
+				4ACAABE52566BAFC004FF3EB /* Sounds */,
 				4A5C2CD62554587A0014BC95 /* Mobile Gaming ICA - VirusGame.entitlements */,
 				4A5C2CA2255445230014BC95 /* AppDelegate.swift */,
 				4A5C2CA4255445230014BC95 /* GameScene.sks */,
@@ -134,6 +139,21 @@
 				4A5C2CCA255445270014BC95 /* Info.plist */,
 			);
 			path = "Mobile Gaming ICA - VirusGameUITests";
+			sourceTree = "<group>";
+		};
+		4ACAABE12566B925004FF3EB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4ACAABE22566B925004FF3EB /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4ACAABE52566BAFC004FF3EB /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -481,7 +501,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = UU8FBYK5RR;
 				INFOPLIST_FILE = "Mobile Gaming ICA - VirusGameTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -502,7 +524,9 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = UU8FBYK5RR;
 				INFOPLIST_FILE = "Mobile Gaming ICA - VirusGameTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
