@@ -17,6 +17,11 @@
 		4A5C2CB3255445260014BC95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A5C2CB1255445260014BC95 /* LaunchScreen.storyboard */; };
 		4A5C2CBE255445260014BC95 /* Mobile_Gaming_ICA___VirusGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5C2CBD255445260014BC95 /* Mobile_Gaming_ICA___VirusGameTests.swift */; };
 		4A5C2CC9255445270014BC95 /* Mobile_Gaming_ICA___VirusGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5C2CC8255445270014BC95 /* Mobile_Gaming_ICA___VirusGameUITests.swift */; };
+		4AAE26CB2570013B0083F3DE /* Energy in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C62570013B0083F3DE /* Energy */; };
+		4AAE26CC2570013B0083F3DE /* MenuButtons in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C72570013B0083F3DE /* MenuButtons */; };
+		4AAE26CD2570013B0083F3DE /* MenuTextures in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C82570013B0083F3DE /* MenuTextures */; };
+		4AAE26CE2570013B0083F3DE /* Vriuses in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C92570013B0083F3DE /* Vriuses */; };
+		4AAE26CF2570013B0083F3DE /* Background in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26CA2570013B0083F3DE /* Background */; };
 		4ACAABE32566B926004FF3EB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACAABE22566B925004FF3EB /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +60,11 @@
 		4A5C2CC8255445270014BC95 /* Mobile_Gaming_ICA___VirusGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mobile_Gaming_ICA___VirusGameUITests.swift"; sourceTree = "<group>"; };
 		4A5C2CCA255445270014BC95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A5C2CD62554587A0014BC95 /* Mobile Gaming ICA - VirusGame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mobile Gaming ICA - VirusGame.entitlements"; sourceTree = "<group>"; };
+		4AAE26C62570013B0083F3DE /* Energy */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Energy; path = ../../../Assets/Energy; sourceTree = "<group>"; };
+		4AAE26C72570013B0083F3DE /* MenuButtons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuButtons; path = ../../../Assets/MenuButtons; sourceTree = "<group>"; };
+		4AAE26C82570013B0083F3DE /* MenuTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuTextures; path = ../../../Assets/MenuTextures; sourceTree = "<group>"; };
+		4AAE26C92570013B0083F3DE /* Vriuses */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vriuses; path = ../../../Assets/Vriuses; sourceTree = "<group>"; };
+		4AAE26CA2570013B0083F3DE /* Background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Background; path = ../../../Assets/Background; sourceTree = "<group>"; };
 		4ACAABE22566B925004FF3EB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -108,6 +118,7 @@
 		4A5C2CA1255445230014BC95 /* Mobile Gaming ICA - VirusGame */ = {
 			isa = PBXGroup;
 			children = (
+				4AAE26C52570010A0083F3DE /* Assets */,
 				4ACAABE52566BAFC004FF3EB /* Sounds */,
 				4A5C2CD62554587A0014BC95 /* Mobile Gaming ICA - VirusGame.entitlements */,
 				4A5C2CA2255445230014BC95 /* AppDelegate.swift */,
@@ -139,6 +150,18 @@
 				4A5C2CCA255445270014BC95 /* Info.plist */,
 			);
 			path = "Mobile Gaming ICA - VirusGameUITests";
+			sourceTree = "<group>";
+		};
+		4AAE26C52570010A0083F3DE /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				4AAE26CA2570013B0083F3DE /* Background */,
+				4AAE26C62570013B0083F3DE /* Energy */,
+				4AAE26C72570013B0083F3DE /* MenuButtons */,
+				4AAE26C82570013B0083F3DE /* MenuTextures */,
+				4AAE26C92570013B0083F3DE /* Vriuses */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		4ACAABE12566B925004FF3EB /* Frameworks */ = {
@@ -260,10 +283,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AAE26CB2570013B0083F3DE /* Energy in Resources */,
 				4A5C2CAE255445240014BC95 /* Main.storyboard in Resources */,
 				4A5C2CA5255445230014BC95 /* GameScene.sks in Resources */,
 				4A5C2CB0255445260014BC95 /* Assets.xcassets in Resources */,
 				4A5C2CB3255445260014BC95 /* LaunchScreen.storyboard in Resources */,
+				4AAE26CD2570013B0083F3DE /* MenuTextures in Resources */,
+				4AAE26CE2570013B0083F3DE /* Vriuses in Resources */,
+				4AAE26CC2570013B0083F3DE /* MenuButtons in Resources */,
+				4AAE26CF2570013B0083F3DE /* Background in Resources */,
 				4A5C2CA7255445230014BC95 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

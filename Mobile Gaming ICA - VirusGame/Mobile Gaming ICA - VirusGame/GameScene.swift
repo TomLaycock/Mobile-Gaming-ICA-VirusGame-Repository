@@ -15,7 +15,7 @@ class GameScene: SKScene
             audioPlayer1 = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound1!))
             //audioPlayer2 = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound2!))
         } catch {
-            print(error)
+            print(error)                             
         }
     }
     
@@ -28,8 +28,6 @@ class GameScene: SKScene
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         audioPlayer1.play()
     }
-    
-    
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake
