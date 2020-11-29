@@ -11,9 +11,7 @@ import GameplayKit
 import AVFoundation
 import CoreMotion
 
-class Button: SKSpriteNode {
-    
-}
+
 
 class MainMenu: SKScene {
     
@@ -34,7 +32,7 @@ class MainMenu: SKScene {
         var Offset = CGFloat(-1)
         
         for ButtonName in mButtons {
-            let MenuButton = SKSpriteNode(imageNamed: "MenuButtons/" + ButtonName)
+            let MenuButton = Button(imageNamed: "MenuButtons/" + ButtonName)
             MenuButton.name = ButtonName
             MenuButton.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
             MenuButton.position = CGPoint(x: frame.midX + (Offset * MenuButton.frame.width * 2), y: frame.midY)
@@ -42,6 +40,32 @@ class MainMenu: SKScene {
             Offset = Offset + CGFloat(1)
             
             addChild(MenuButton)
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches
+        {
+            let location = touch.location(in: self)
+            let touchedNode = atPoint(location)
+            
+            if touchedNode.name == mButtons[0]
+            {
+                if let scene = GameScene(fileNamed: "GameScene")
+                {
+                    scene.scaleMode = .resizeFill
+                    view?.presentScene(scene)
+                }
+                
+            }
+            if touchedNode.name == mButtons[1]
+            {
+                
+            }
+            if touchedNode.name == mButtons[2]
+            {
+                
+            }
         }
     }
     
