@@ -23,6 +23,9 @@
 		4AAE26CE2570013B0083F3DE /* Vriuses in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C92570013B0083F3DE /* Vriuses */; };
 		4AAE26CF2570013B0083F3DE /* Background in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26CA2570013B0083F3DE /* Background */; };
 		4ACAABE32566B926004FF3EB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACAABE22566B925004FF3EB /* AVFoundation.framework */; };
+		4AF71DD32573C4EA003877FA /* ButtonClicks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF71DD22573C4EA003877FA /* ButtonClicks */; };
+		4AF71DD52573C997003877FA /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF71DD42573C997003877FA /* MainMenu.sks */; };
+		4AF71DD72573C9B1003877FA /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF71DD62573C9B1003877FA /* MainMenu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,9 @@
 		4AAE26C92570013B0083F3DE /* Vriuses */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vriuses; path = ../../../Assets/Vriuses; sourceTree = "<group>"; };
 		4AAE26CA2570013B0083F3DE /* Background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Background; path = ../../../Assets/Background; sourceTree = "<group>"; };
 		4ACAABE22566B925004FF3EB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4AF71DD22573C4EA003877FA /* ButtonClicks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ButtonClicks; path = ../../Sounds/ButtonClicks; sourceTree = "<group>"; };
+		4AF71DD42573C997003877FA /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
+		4AF71DD62573C9B1003877FA /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +136,8 @@
 				4A5C2CAF255445260014BC95 /* Assets.xcassets */,
 				4A5C2CB1255445260014BC95 /* LaunchScreen.storyboard */,
 				4A5C2CB4255445260014BC95 /* Info.plist */,
+				4AF71DD42573C997003877FA /* MainMenu.sks */,
+				4AF71DD62573C9B1003877FA /* MainMenu.swift */,
 			);
 			path = "Mobile Gaming ICA - VirusGame";
 			sourceTree = "<group>";
@@ -175,6 +183,7 @@
 		4ACAABE52566BAFC004FF3EB /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				4AF71DD22573C4EA003877FA /* ButtonClicks */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -284,12 +293,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AAE26CB2570013B0083F3DE /* Energy in Resources */,
+				4AF71DD52573C997003877FA /* MainMenu.sks in Resources */,
 				4A5C2CAE255445240014BC95 /* Main.storyboard in Resources */,
 				4A5C2CA5255445230014BC95 /* GameScene.sks in Resources */,
 				4A5C2CB0255445260014BC95 /* Assets.xcassets in Resources */,
 				4A5C2CB3255445260014BC95 /* LaunchScreen.storyboard in Resources */,
 				4AAE26CD2570013B0083F3DE /* MenuTextures in Resources */,
 				4AAE26CE2570013B0083F3DE /* Vriuses in Resources */,
+				4AF71DD32573C4EA003877FA /* ButtonClicks in Resources */,
 				4AAE26CC2570013B0083F3DE /* MenuButtons in Resources */,
 				4AAE26CF2570013B0083F3DE /* Background in Resources */,
 				4A5C2CA7255445230014BC95 /* Actions.sks in Resources */,
@@ -320,6 +331,7 @@
 				4A5C2CA9255445240014BC95 /* GameScene.swift in Sources */,
 				4A5C2CAB255445240014BC95 /* GameViewController.swift in Sources */,
 				4A5C2CA3255445230014BC95 /* AppDelegate.swift in Sources */,
+				4AF71DD72573C9B1003877FA /* MainMenu.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
