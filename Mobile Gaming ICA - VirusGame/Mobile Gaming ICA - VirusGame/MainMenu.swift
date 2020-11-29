@@ -31,6 +31,18 @@ class MainMenu: SKScene {
         
         addChild(MenuTitle)
         
+        var Offset = CGFloat(-1)
+        
+        for ButtonName in mButtons {
+            let MenuButton = SKSpriteNode(imageNamed: "MenuButtons/" + ButtonName)
+            MenuButton.name = ButtonName
+            MenuButton.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
+            MenuButton.position = CGPoint(x: frame.midX + (Offset * MenuButton.frame.width * 2), y: frame.midY)
+            
+            Offset = Offset + CGFloat(1)
+            
+            addChild(MenuButton)
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {

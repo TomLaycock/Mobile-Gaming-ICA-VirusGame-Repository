@@ -70,7 +70,7 @@
 		4AAE26CA2570013B0083F3DE /* Background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Background; path = ../../../Assets/Background; sourceTree = "<group>"; };
 		4ACAABE22566B925004FF3EB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4AF71DD22573C4EA003877FA /* ButtonClicks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ButtonClicks; path = ../../Sounds/ButtonClicks; sourceTree = "<group>"; };
-		4AF71DD42573C997003877FA /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
+		4AF71DD42573C997003877FA /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = MainMenu.sks; path = "Mobile Gaming ICA - VirusGame/MainMenu.sks"; sourceTree = SOURCE_ROOT; };
 		4AF71DD62573C9B1003877FA /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
