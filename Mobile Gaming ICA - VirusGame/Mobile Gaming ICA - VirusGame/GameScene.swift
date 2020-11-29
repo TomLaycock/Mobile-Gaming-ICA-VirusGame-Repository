@@ -5,6 +5,8 @@ import AVFoundation
 class GameScene: SKScene
 {
     
+    let mScoreLabel = SKLabelNode(fileNamed: "HelveticaNeue-Thin")
+    
     var audioPlayer1 : AVAudioPlayer!
     var audioPlayer2 : AVAudioPlayer!
     
