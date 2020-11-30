@@ -22,15 +22,22 @@ class GameViewController: UIViewController {
             
             if let scene = MainMenu(fileNamed: "MainMenu")
             {
-                
                 mMainMenuScene = scene
-                
                 scene.scaleMode = .resizeFill
-                view.presentScene(scene)
             }
             
-            view.ignoresSiblingOrder = true
+            if let scene = GameScene(fileNamed: "GameScene")
+            {
+                mGameScene = scene
+                scene.scaleMode = .resizeFill
+            }
             
+            mMainMenuScene.mGameScene = mGameScene
+            mGameScene.mMainMenuScene = mMainMenuScene
+            
+            view.presentScene(mMainMenuScene)
+            
+            view.ignoresSiblingOrder = true
             view.showsFPS = true
             view.showsNodeCount = true
         }

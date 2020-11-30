@@ -5,11 +5,16 @@ import CoreMotion
 
 class GameScene: SKScene
 {
+ 
+    var mMainMenuScene : MainMenu!
     
     let mMotionManager = CMMotionManager()
     
     //Game UI
     let mScoreLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
+    
+    let mHealthBar = NumberBar(Start: 100, Max: 100, BackPath: "Squares/BlackSquare.jpg", ForePath: "Squares/GreenSquare", Lentgh: 200, Height: 35)
+    let mEnergyBar = NumberBar(Start: 100, Max: 100, BackPath: "Squares/BlackSquare.jpg", ForePath: "Squares/blueSquare", Lentgh: 200, Height: 35)
     
     //Pause Menu
     let mPauseButtonName = "PauseButton-TB"
@@ -22,18 +27,22 @@ class GameScene: SKScene
     
     var mGamePaused = false
     
+    var mGameSetupComplete = false
+    
     //Game Sounds
     var audioPlayer1 : AVAudioPlayer!
-    var audioPlayer2 : AVAudioPlayer!
     
     override func didMove(to view: SKView) {
+        
+        //if(mGameSetupComplete) { ResetGameScene(); return }
+            
+        //mGameSetupComplete = true
+        
         let sound1 = Bundle.main.path(forResource: "ButtonClicks/Button-0000", ofType: "wav")
-        //let sound2 = Bundle.main.path(forResource: "beep07", ofType: "wav")
         do {
             audioPlayer1 = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound1!))
-            //audioPlayer2 = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound2!))
         } catch {
-            print(error)                             
+            print(error)
         }
         
         //Creating MainMenu Buttons
@@ -64,7 +73,6 @@ class GameScene: SKScene
         mReturnToMainMenuButton.SetButtonState(value: false)
         addChild(mReturnToMainMenuButton)
         
-        
         //Game UI
         mScoreLabel.fontSize = 72
         mScoreLabel.position = CGPoint(x: frame.midX, y: 20)
@@ -73,12 +81,24 @@ class GameScene: SKScene
         mScoreLabel.horizontalAlignmentMode = .center
         addChild(mScoreLabel)
         
+        mHealthBar.SetBarPosition(to: CGPoint(x: 10, y: 30))
+        addChild(mHealthBar.GetBarBackground())
+        addChild(mHealthBar.GetBarForeground())
+        addChild(mHealthBar.GetBarText())
+        
+        mEnergyBar.SetBarPosition(to: CGPoint(x: 10, y: 75))
+        addChild(mEnergyBar.GetBarBackground())
+        addChild(mEnergyBar.GetBarForeground())
+        addChild(mEnergyBar.GetBarText())
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //audioPlayer2.play()
+        
         //let playSound = SKAction.playSoundFileNamed("ButtonClicks/Button-0001", waitForCompletion: true)
         //self.run(playSound)
+        
+        mHealthBar.DecreaseNumberBarValue(by: 1)
         
         for touch in touches
         {
@@ -88,35 +108,36 @@ class GameScene: SKScene
             if touchedNode.name == mPauseButtonName
             {
                 TogglePauseMenu()
+                audioPlayer1.play()
             }
             else if touchedNode.name == mButtons[0]
             {
                 TogglePauseMenu()
+                audioPlayer1.play()
             }
             else if touchedNode.name == mButtons[1]
             {
-                
+                audioPlayer1.play()
             }
             else if touchedNode.name == mButtons[2]
             {
-                if let scene = MainMenu(fileNamed: "MainMenu")
-                {
-                    scene.scaleMode = .resizeFill
-                    view?.presentScene(scene)
-                }
+                audioPlayer1.play()
+                
+                ResetGameScene()
+                removeAllChildren()
+                
+                mMainMenuScene.scaleMode = .resizeFill
+                view?.presentScene(mMainMenuScene)
             }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //audioPlayer1.play()
+
     }
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        //if motion == .motionShake
-        //{
-        //    audioPlayer2.stop()
-        //}
+
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -126,17 +147,49 @@ class GameScene: SKScene
     override func update(_ currentTime: TimeInterval)
     {
         
+        if(!mGamePaused)
+        {
+            
+            
+            
+        }
+        else
+        {
+            //Game Paused
+        }
+        
     }
  
     func TogglePauseMenu()
     {
         mGamePaused = !mGamePaused
            
-        mPauseButton.SetButtonState(value: mGamePaused)
+        mPauseButton.SetButtonState(value: !mGamePaused)
         
-        mResumeButton.SetButtonState(value: !mGamePaused)
-        mOptionsButton.SetButtonState(value: !mGamePaused)
-        mReturnToMainMenuButton.SetButtonState(value: !mGamePaused)
+        mResumeButton.SetButtonState(value: mGamePaused)
+        mOptionsButton.SetButtonState(value: mGamePaused)
+        mReturnToMainMenuButton.SetButtonState(value: mGamePaused)
+    }
+ 
+    func TogglePauseMenuSpecifc(to Value: Bool)
+    {
+        mGamePaused = Value
+        
+        mPauseButton.SetButtonState(value: !Value)
+        
+        mResumeButton.SetButtonState(value: Value)
+        mOptionsButton.SetButtonState(value: Value)
+        mReturnToMainMenuButton.SetButtonState(value: Value)
+    }
+    
+    func ResetGameScene()
+    {
+        TogglePauseMenuSpecifc(to: false)
+        
+        mHealthBar.SetNumberBarValue(to: mHealthBar.mNumberBarMax)
+        mEnergyBar.SetNumberBarValue(to: mEnergyBar.mNumberBarMax)
+        
+        mScoreLabel.text = "SCORE: 0"
     }
     
 }

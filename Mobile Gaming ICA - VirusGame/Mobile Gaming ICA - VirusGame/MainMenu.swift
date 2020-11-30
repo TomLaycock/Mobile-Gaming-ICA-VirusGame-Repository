@@ -11,16 +11,22 @@ import GameplayKit
 import AVFoundation
 import CoreMotion
 
-
-
 class MainMenu: SKScene {
+    
+    var mGameScene : GameScene!
     
     let mGameTitle = "MenuTextures/GameTitle"
     let mButtons = ["PlayButton-TB", "OptionsButton-TB", "ExitButton-TB"]
     
+    var mSceneLoadingComplete = false
+    
     override func didMove(to view: SKView) {
         
-        print("Test")
+        //if(mSceneLoadingComplete) { return }
+        
+        //mSceneLoadingComplete = true
+        
+        print("Loading Main Menu")
         
         let MenuTitle = SKSpriteNode(imageNamed: mGameTitle)
         MenuTitle.name = "MenuTitle"
@@ -36,6 +42,7 @@ class MainMenu: SKScene {
             MenuButton.name = ButtonName
             MenuButton.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
             MenuButton.position = CGPoint(x: frame.midX + (Offset * MenuButton.frame.width * 2), y: frame.midY)
+            MenuButton.SetButtonPosition(to: MenuButton.position)
             
             Offset = Offset + CGFloat(1)
             
@@ -51,12 +58,10 @@ class MainMenu: SKScene {
             
             if touchedNode.name == mButtons[0]
             {
-                if let scene = GameScene(fileNamed: "GameScene")
-                {
-                    scene.scaleMode = .resizeFill
-                    view?.presentScene(scene)
-                }
+                removeAllChildren()
                 
+                mGameScene.scaleMode = .resizeFill
+                view?.presentScene(mGameScene)
             }
             if touchedNode.name == mButtons[1]
             {
