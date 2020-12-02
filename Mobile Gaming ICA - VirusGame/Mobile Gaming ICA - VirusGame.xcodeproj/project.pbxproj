@@ -21,14 +21,19 @@
 		4AAE26CB2570013B0083F3DE /* Energy in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C62570013B0083F3DE /* Energy */; };
 		4AAE26CC2570013B0083F3DE /* MenuButtons in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C72570013B0083F3DE /* MenuButtons */; };
 		4AAE26CD2570013B0083F3DE /* MenuTextures in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C82570013B0083F3DE /* MenuTextures */; };
-		4AAE26CE2570013B0083F3DE /* Vriuses in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26C92570013B0083F3DE /* Vriuses */; };
 		4AAE26CF2570013B0083F3DE /* Background in Resources */ = {isa = PBXBuildFile; fileRef = 4AAE26CA2570013B0083F3DE /* Background */; };
 		4ACAABE32566B926004FF3EB /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ACAABE22566B925004FF3EB /* AVFoundation.framework */; };
 		4AF71DD32573C4EA003877FA /* ButtonClicks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF71DD22573C4EA003877FA /* ButtonClicks */; };
 		4AF71DD52573C997003877FA /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF71DD42573C997003877FA /* MainMenu.sks */; };
 		4AF71DD72573C9B1003877FA /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF71DD62573C9B1003877FA /* MainMenu.swift */; };
 		E2660F792575684C00CDC627 /* NumberBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2660F782575684C00CDC627 /* NumberBar.swift */; };
-		E2660F7B2575762E00CDC627 /* Squares in Resources */ = {isa = PBXBuildFile; fileRef = E2660F7A2575762E00CDC627 /* Squares */; };
+		E2C950EF2576ABD000F4D776 /* Squares in Resources */ = {isa = PBXBuildFile; fileRef = E2C950EE2576ABD000F4D776 /* Squares */; };
+		E2C950F12576AD5C00F4D776 /* EnergyBall.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C950F02576AD5C00F4D776 /* EnergyBall.swift */; };
+		E2C950F32576AE9900F4D776 /* PoolSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C950F22576AE9900F4D776 /* PoolSystem.swift */; };
+		E2C950F52576E2B700F4D776 /* WhiteBloodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C950F42576E2B700F4D776 /* WhiteBloodCell.swift */; };
+		E2C950F72576E46C00F4D776 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C950F62576E46C00F4D776 /* Cell.swift */; };
+		E2C950F92576E96A00F4D776 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2C950F82576E96A00F4D776 /* Utility.swift */; };
+		E2C951142576EEC700F4D776 /* Viruses in Resources */ = {isa = PBXBuildFile; fileRef = E2C951132576EEC700F4D776 /* Viruses */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,14 +75,19 @@
 		4AAE26C62570013B0083F3DE /* Energy */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Energy; path = ../../../Assets/Energy; sourceTree = "<group>"; };
 		4AAE26C72570013B0083F3DE /* MenuButtons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuButtons; path = ../../../Assets/MenuButtons; sourceTree = "<group>"; };
 		4AAE26C82570013B0083F3DE /* MenuTextures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MenuTextures; path = ../../../Assets/MenuTextures; sourceTree = "<group>"; };
-		4AAE26C92570013B0083F3DE /* Vriuses */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Vriuses; path = ../../../Assets/Vriuses; sourceTree = "<group>"; };
 		4AAE26CA2570013B0083F3DE /* Background */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Background; path = ../../../Assets/Background; sourceTree = "<group>"; };
 		4ACAABE22566B925004FF3EB /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4AF71DD22573C4EA003877FA /* ButtonClicks */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ButtonClicks; path = ../../Sounds/ButtonClicks; sourceTree = "<group>"; };
 		4AF71DD42573C997003877FA /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = MainMenu.sks; path = "Mobile Gaming ICA - VirusGame/MainMenu.sks"; sourceTree = SOURCE_ROOT; };
 		4AF71DD62573C9B1003877FA /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
 		E2660F782575684C00CDC627 /* NumberBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBar.swift; sourceTree = "<group>"; };
-		E2660F7A2575762E00CDC627 /* Squares */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Squares; path = ../../../../../NewTextures/Squares; sourceTree = "<group>"; };
+		E2C950EE2576ABD000F4D776 /* Squares */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Squares; path = ../../../Assets/Squares; sourceTree = "<group>"; };
+		E2C950F02576AD5C00F4D776 /* EnergyBall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergyBall.swift; sourceTree = "<group>"; };
+		E2C950F22576AE9900F4D776 /* PoolSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoolSystem.swift; sourceTree = "<group>"; };
+		E2C950F42576E2B700F4D776 /* WhiteBloodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhiteBloodCell.swift; sourceTree = "<group>"; };
+		E2C950F62576E46C00F4D776 /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		E2C950F82576E96A00F4D776 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		E2C951132576EEC700F4D776 /* Viruses */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Viruses; path = ../../../Assets/Viruses; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +156,11 @@
 				4AF71DD62573C9B1003877FA /* MainMenu.swift */,
 				4A4361972573FBB1009006E0 /* Button.swift */,
 				E2660F782575684C00CDC627 /* NumberBar.swift */,
+				E2C950F02576AD5C00F4D776 /* EnergyBall.swift */,
+				E2C950F22576AE9900F4D776 /* PoolSystem.swift */,
+				E2C950F42576E2B700F4D776 /* WhiteBloodCell.swift */,
+				E2C950F62576E46C00F4D776 /* Cell.swift */,
+				E2C950F82576E96A00F4D776 /* Utility.swift */,
 			);
 			path = "Mobile Gaming ICA - VirusGame";
 			sourceTree = "<group>";
@@ -171,12 +186,12 @@
 		4AAE26C52570010A0083F3DE /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				E2660F7A2575762E00CDC627 /* Squares */,
+				E2C951132576EEC700F4D776 /* Viruses */,
+				E2C950EE2576ABD000F4D776 /* Squares */,
 				4AAE26CA2570013B0083F3DE /* Background */,
 				4AAE26C62570013B0083F3DE /* Energy */,
 				4AAE26C72570013B0083F3DE /* MenuButtons */,
 				4AAE26C82570013B0083F3DE /* MenuTextures */,
-				4AAE26C92570013B0083F3DE /* Vriuses */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -306,10 +321,10 @@
 				4A5C2CAE255445240014BC95 /* Main.storyboard in Resources */,
 				4A5C2CA5255445230014BC95 /* GameScene.sks in Resources */,
 				4A5C2CB0255445260014BC95 /* Assets.xcassets in Resources */,
+				E2C951142576EEC700F4D776 /* Viruses in Resources */,
 				4A5C2CB3255445260014BC95 /* LaunchScreen.storyboard in Resources */,
 				4AAE26CD2570013B0083F3DE /* MenuTextures in Resources */,
-				4AAE26CE2570013B0083F3DE /* Vriuses in Resources */,
-				E2660F7B2575762E00CDC627 /* Squares in Resources */,
+				E2C950EF2576ABD000F4D776 /* Squares in Resources */,
 				4AF71DD32573C4EA003877FA /* ButtonClicks in Resources */,
 				4AAE26CC2570013B0083F3DE /* MenuButtons in Resources */,
 				4AAE26CF2570013B0083F3DE /* Background in Resources */,
@@ -340,10 +355,15 @@
 			files = (
 				4A4361982573FBB1009006E0 /* Button.swift in Sources */,
 				4A5C2CA9255445240014BC95 /* GameScene.swift in Sources */,
+				E2C950F52576E2B700F4D776 /* WhiteBloodCell.swift in Sources */,
+				E2C950F92576E96A00F4D776 /* Utility.swift in Sources */,
+				E2C950F32576AE9900F4D776 /* PoolSystem.swift in Sources */,
 				E2660F792575684C00CDC627 /* NumberBar.swift in Sources */,
 				4A5C2CAB255445240014BC95 /* GameViewController.swift in Sources */,
 				4A5C2CA3255445230014BC95 /* AppDelegate.swift in Sources */,
+				E2C950F72576E46C00F4D776 /* Cell.swift in Sources */,
 				4AF71DD72573C9B1003877FA /* MainMenu.swift in Sources */,
+				E2C950F12576AD5C00F4D776 /* EnergyBall.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

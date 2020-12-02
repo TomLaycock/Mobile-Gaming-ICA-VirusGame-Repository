@@ -6,10 +6,15 @@ import CoreMotion
 class GameScene: SKScene
 {
  
+    //Game Values
     var mMainMenuScene : MainMenu!
+    let mPoolSystem = PoolSystem()
+    
+    var mDeltaTime = Double(0)
+    var mPrevTime = Double(0)
     
     let mMotionManager = CMMotionManager()
-    
+
     //Game UI
     let mScoreLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
     
@@ -33,10 +38,29 @@ class GameScene: SKScene
     var audioPlayer1 : AVAudioPlayer!
     
     override func didMove(to view: SKView) {
+
+        if !mGameSetupComplete
+        {
+            mPoolSystem.SetupPoolSystem(scene: self)
+            print("Pool System First Time Initialisation")
+        }
+        else
+        {
+            mPoolSystem.ReInitialise()
+            print("Re Initialising Pool System")
+        }
+
+        for _ in 1...10
+        {
+            let EnergyToSpawn = mPoolSystem.GetNextAvailableEnergyBall()
+            EnergyToSpawn.Spawn(at: CGPoint(x: Int.random(in: 10...Int(frame.maxX - 10)), y: Int.random(in: 10...Int(frame.maxY - 10))), with: 1)
+        }
         
-        //if(mGameSetupComplete) { ResetGameScene(); return }
-            
-        //mGameSetupComplete = true
+        for _ in 1...3
+        {
+            let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
+            WhiteBloodCell.SpawnWhiteBloodCell(position: CGPoint(x: Int.random(in: 60...Int(frame.maxX - 60)), y: Int.random(in: 60...Int(frame.maxY - 60))), size: CGSize(width: 100, height: 100))
+        }
         
         let sound1 = Bundle.main.path(forResource: "ButtonClicks/Button-0000", ofType: "wav")
         do {
@@ -91,6 +115,8 @@ class GameScene: SKScene
         addChild(mEnergyBar.GetBarForeground())
         addChild(mEnergyBar.GetBarText())
 
+        mGameSetupComplete = true
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -147,10 +173,29 @@ class GameScene: SKScene
     override func update(_ currentTime: TimeInterval)
     {
         
+        if(mDeltaTime == 0)
+        {
+            mDeltaTime = Double(1 / 60)
+            mPrevTime = currentTime
+        }
+        else
+        {
+            mDeltaTime = currentTime - mPrevTime
+            mPrevTime = currentTime
+        }
+        
+        print(mDeltaTime)
+        
         if(!mGamePaused)
         {
             
-            
+            for cell in mPoolSystem.GetWhiteBloodCells()
+            {
+                if cell.GetAlive()
+                {
+                    cell.MoveTowards(target: CGPoint(x: 0, y: 0))
+                }
+            }
             
         }
         else
@@ -184,6 +229,8 @@ class GameScene: SKScene
     
     func ResetGameScene()
     {
+        mPoolSystem.ResetPools()
+        
         TogglePauseMenuSpecifc(to: false)
         
         mHealthBar.SetNumberBarValue(to: mHealthBar.mNumberBarMax)
