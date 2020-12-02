@@ -25,7 +25,7 @@ class EnergyBall : SKSpriteNode {
         self.mAlive = true
     }
     
-    func InitialiseEnergyBall(scene Scene: SKScene)
+    func InitialiseEnergyBall(scene Scene: GameScene)
     {
         self.name = "EnergyBall"
         self.position = CGPoint(x: -100, y: 0)

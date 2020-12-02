@@ -13,9 +13,11 @@ import AVFoundation
 class WhiteBloodCell : Cell
 {
 
+    var mGameScene : GameScene!
+    
     var mAlive = false
     var mSpeed = Float(1)
-    
+
     init(back BackTex: String, front FrontTex: String, speed Speed: Float) {
         
         self.mAlive = false
@@ -25,9 +27,10 @@ class WhiteBloodCell : Cell
         super.init(back: BackTex, front: FrontTex)
     }
     
-    func InitialiseWhiteBloodCell(scene Scene: SKScene, name Name: String, zposition ZPosition: CGFloat)
+    func InitialiseWhiteBloodCell(scene Scene: GameScene, name Name: String, zposition ZPosition: CGFloat)
     {
         self.mAlive = false
+        self.mGameScene = Scene
         
         //Initialise Cell Function
         super.InitialiseCell(scene: Scene, name: Name, zposition: ZPosition)
@@ -50,11 +53,20 @@ class WhiteBloodCell : Cell
     {
         return mAlive
     }
+    
+    func SetSpeed(to Speed: Float)
+    {
+        mSpeed = Speed
+    }
         
     func MoveBy(by Position: Vector2)
     {
         let currentPos = super.GetPosition()
-        let newPos = CGPoint(x: currentPos.x + CGFloat(Position.x * self.mSpeed), y: currentPos.y + CGFloat(Position.y * self.mSpeed))
+        let newPos = CGPoint(x:
+            currentPos.x + CGFloat((Position.x * self.mSpeed) * Float(self.mGameScene.GetDeltaTime())),
+                             y:
+            currentPos.y + CGFloat((Position.y * self.mSpeed) * Float(self.mGameScene.GetDeltaTime()))
+                             )
         
         super.SetPosition(to: newPos)
     }
@@ -65,7 +77,13 @@ class WhiteBloodCell : Cell
         let Direction = Vector2(CGPoint: Target) - Vector2(CGPoint: CurrentPos)
         let NDir = Vector2.normalise(v: Direction)
         
-        let newPos = CGPoint(x: CurrentPos.x + CGFloat(NDir.x * self.mSpeed), y: CurrentPos.y + CGFloat(NDir.y * self.mSpeed))
+        let DeltaTime = Float(self.mGameScene.GetDeltaTime())
+        
+        let newPos = CGPoint(x:
+            CurrentPos.x + CGFloat((NDir.x * DeltaTime) * self.mSpeed),
+                             y:
+            CurrentPos.y + CGFloat((NDir.y * DeltaTime) * self.mSpeed)
+                             )
         
         super.SetPosition(to: newPos)
     }

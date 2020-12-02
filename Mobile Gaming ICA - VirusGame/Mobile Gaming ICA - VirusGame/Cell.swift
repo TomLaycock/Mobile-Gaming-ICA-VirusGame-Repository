@@ -57,7 +57,7 @@ class Cell
         Scene.addChild(self.mCellForeground)
     }
     
-    func InitialiseCell(scene Scene: SKScene, name Name: String, zposition ZPosition: CGFloat)
+    func InitialiseCell(scene Scene: GameScene, name Name: String, zposition ZPosition: CGFloat)
     {
         self.SetPosition(to: CGPoint(x: -100, y: 0))
         self.SetSize(to: CGSize(width: CGFloat(1), height: CGFloat(1)))

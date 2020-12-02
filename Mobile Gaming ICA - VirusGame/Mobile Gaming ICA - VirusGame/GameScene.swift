@@ -60,7 +60,10 @@ class GameScene: SKScene
         {
             let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
             WhiteBloodCell.SpawnWhiteBloodCell(position: CGPoint(x: Int.random(in: 60...Int(frame.maxX - 60)), y: Int.random(in: 60...Int(frame.maxY - 60))), size: CGSize(width: 100, height: 100))
+            WhiteBloodCell.SetSpeed(to: 100)
         }
+        
+        print("Pool System Object Requests Complete")
         
         let sound1 = Bundle.main.path(forResource: "ButtonClicks/Button-0000", ofType: "wav")
         do {
@@ -115,6 +118,8 @@ class GameScene: SKScene
         addChild(mEnergyBar.GetBarForeground())
         addChild(mEnergyBar.GetBarText())
 
+        print("UI Setup Complete")
+        
         mGameSetupComplete = true
         
     }
@@ -175,7 +180,7 @@ class GameScene: SKScene
         
         if(mDeltaTime == 0)
         {
-            mDeltaTime = Double(1 / 60)
+            mDeltaTime = Double(0.015)
             mPrevTime = currentTime
         }
         else
@@ -184,7 +189,7 @@ class GameScene: SKScene
             mPrevTime = currentTime
         }
         
-        print(mDeltaTime)
+        //print(String(currentTime) + "    " + String(mPrevTime) + "     " + String(mDeltaTime))
         
         if(!mGamePaused)
         {
@@ -237,6 +242,11 @@ class GameScene: SKScene
         mEnergyBar.SetNumberBarValue(to: mEnergyBar.mNumberBarMax)
         
         mScoreLabel.text = "SCORE: 0"
+    }
+ 
+    func GetDeltaTime() -> Double
+    {
+        return self.mDeltaTime
     }
     
 }

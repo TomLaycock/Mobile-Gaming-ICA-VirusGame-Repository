@@ -13,14 +13,14 @@ import AVFoundation
 class PoolSystem
 {
     
-    var mGameScene : SKScene!
+    var mGameScene : GameScene!
     
     var mEnergyBallPool : [EnergyBall] = []
     var mWhiteBloodCellPool : [WhiteBloodCell] = []
     
     
     //Pool Functionality
-    func SetupPoolSystem(scene Scene: SKScene)
+    func SetupPoolSystem(scene Scene: GameScene)
     {
         self.mGameScene = Scene
         
