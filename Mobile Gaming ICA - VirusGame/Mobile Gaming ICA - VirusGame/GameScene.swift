@@ -120,6 +120,9 @@ class GameScene: SKScene
 
         print("UI Setup Complete")
         
+        mMotionManager.startAccelerometerUpdates()
+        mMotionManager.startGyroUpdates()
+        
         mGameSetupComplete = true
         
     }
@@ -194,6 +197,16 @@ class GameScene: SKScene
         if(!mGamePaused)
         {
             
+            if let accelerometer = mMotionManager.accelerometerData
+            {
+                physicsWorld.gravity = CGVector(dx: accelerometer.acceleration.y * -50, dy: accelerometer.acceleration.x*50)
+            }
+            
+            if let gyroscope = mMotionManager.gyroData
+            {
+                print("X: " + String(gyroscope.rotationRate.x) + "     Y: " + String(gyroscope.rotationRate.y) + "     Z: " + String(gyroscope.rotationRate.z))
+            }
+            
             for cell in mPoolSystem.GetWhiteBloodCells()
             {
                 if cell.GetAlive()
@@ -247,6 +260,11 @@ class GameScene: SKScene
     func GetDeltaTime() -> Double
     {
         return self.mDeltaTime
+    }
+ 
+    func ShakeDevice()
+    {
+        
     }
     
 }
