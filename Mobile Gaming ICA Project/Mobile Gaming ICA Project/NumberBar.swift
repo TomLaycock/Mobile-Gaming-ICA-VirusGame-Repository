@@ -33,7 +33,7 @@ class NumberBar {
         
         mBarBackground = SKSpriteNode(imageNamed: BackgroundImagePath)
         mBarForeground = SKSpriteNode(imageNamed: ForegroundImagePath)
-        
+
         mBarBackground.anchorPoint = CGPoint(x: 0, y: 0.5)
         mBarForeground.anchorPoint = CGPoint(x: 0, y: 0.5)
         
@@ -42,6 +42,7 @@ class NumberBar {
         mBarValueDisplay.horizontalAlignmentMode = .center
         mBarValueDisplay.verticalAlignmentMode = .center
                     
+        self.UpdateBarDisplay()
     }
     
     //Functions to Get DisplayableElements
@@ -70,6 +71,8 @@ class NumberBar {
         mBarForeground.size = CGSize(width: mBarMaxLentgh - 4, height: mBarMaxHeight - 4)
 
         mBarValueDisplay.position = CGPoint(x: Position.x + mBarMaxLentgh / 2, y: Position.y + 0)
+        
+        self.UpdateBarDisplay()
     }
     
     func SetBarZPosition(to Number: Int)
@@ -110,7 +113,7 @@ class NumberBar {
         mBarValueDisplay.text = "" + String(mCurrentNumber)
         
         var newBarWidth = Float(Float(mBarMaxLentgh - 4) / Float(mNumberBarMax)) * Float(mCurrentNumber)
-        
+
         if(newBarWidth > Float(mBarMaxLentgh - 4))
         {
             newBarWidth = Float(mBarMaxLentgh)

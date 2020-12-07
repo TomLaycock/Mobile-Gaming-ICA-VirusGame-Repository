@@ -18,14 +18,35 @@ class GameScene: SKScene
     var mPlayer : Player!
     
     //Game UI
+    let mOptionsMenu = OptionsMenu()
+    let mStoreMenu = GameStoreMenu()
+    
+    let mSoundSystem = CustomSoundSystem()
+    
     let mScoreLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
+    var mScore = 0
+    {
+        didSet
+        {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .decimal
+            let formatteScore = formatter.string(from: mScore as NSNumber) ?? "0"
+            mScoreLabel.text = "SCORE: \(formatteScore)"
+        }
+    }
     
     let mHealthBar = NumberBar(Start: 100, Max: 100, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/GreenSquare", Lentgh: 200, Height: 35)
-    let mEnergyBar = NumberBar(Start: 100, Max: 100, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/blueSquare", Lentgh: 200, Height: 35)
+    let mEnergyBar = NumberBar(Start: 0, Max: 100, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/blueSquare", Lentgh: 200, Height: 35)
+    
+    //Alternate Controlls
+    let mShakeControl = SKSpriteNode(imageNamed: "Assets/OtherInput/ShakeInput")
+    let mDirectionInputImageSource = "Assets/PtherInput/DirectionInputs"
     
     //Pause Menu
     let mPauseButtonName = "PauseButton-TB"
     let mPauseButton = Button(imageNamed: "Assets/MenuButtons/" + "PauseButton-TB")
+    
+    let mPauseMenuTitle = SKSpriteNode(imageNamed: "Assets/MenuTextures/PausedTitle-TB")
     
     let mButtons = ["PlayButton-TB", "OptionsButton-TB", "ExitButton-TB"]
     let mResumeButton = Button(imageNamed: "Assets/MenuButtons/" + "PlayButton-TB")
@@ -35,11 +56,13 @@ class GameScene: SKScene
     let mPauseBackground = SKSpriteNode(imageNamed: "Assets/Squares/BlackSquare.jpg")
     
     var mGamePaused = false
+    var mStoreOpen = false
+    var mGameOptionsMenu = false
     
     var mGameSetupComplete = false
     
-    //Game Sounds
-    var audioPlayer1 : AVAudioPlayer!
+    //User Save Values
+    let defaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
 
@@ -58,17 +81,28 @@ class GameScene: SKScene
         for _ in 1...10
         {
             let EnergyToSpawn = mPoolSystem.GetNextAvailableEnergyBall()
-            EnergyToSpawn.Spawn(at: CGPoint(x: Int.random(in: 10...Int(frame.maxX - 10)), y: Int.random(in: 10...Int(frame.maxY - 10))), with: 1)
+            EnergyToSpawn.Spawn(with: Int.random(in: 1...5), otherCells: mPoolSystem.GetEnergyBalls())
         }
         
         for _ in 1...3
         {
             let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
-            WhiteBloodCell.SpawnWhiteBloodCell(position: CGPoint(x: Int.random(in: 60...Int(frame.maxX - 60)), y: Int.random(in: 60...Int(frame.maxY - 60))), size: CGSize(width: 100, height: 100))
-            WhiteBloodCell.SetSpeed(to: 100)
+            WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: 100, height: 100), otherCells: mPoolSystem.GetWhiteBloodCells())
+            WhiteBloodCell.SetSpeed(to: Float(Int.random(in: 60...100)))
         }
         
         print("Pool System Object Requests Complete")
+        
+        //Initialising Store Menu
+        if !mGameSetupComplete
+        {
+            mOptionsMenu.SetupGameOptionsMenu(scene: self, audioOn: defaults.bool(forKey: "AudioToggleValue"), altOn: defaults.bool(forKey: "AltToggleValue"))
+            mStoreMenu.SetupGameStore(scene: self)
+            mSoundSystem.SetupCustomSoundSystem()
+        }
+        
+        mOptionsMenu.InitialiseOptionsMenu()
+        mStoreMenu.InitialiseStoreMenu()
         
         //Initialising Player
         if !mGameSetupComplete
@@ -78,17 +112,15 @@ class GameScene: SKScene
         
         mPlayer.InitialisePlayer(scene: self, name: "Player", zposition: 8)
         mPlayer.SpawnPlayer(position: CGPoint(x: frame.midX, y: frame.midY), size: CGSize(width: 100, height: 100))
-        
-        
-        //Initialising Sound
-        let sound1 = Bundle.main.path(forResource: "Sounds/ButtonClicks/Button-0000", ofType: "wav")
-        do {
-            audioPlayer1 = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: sound1!))
-        } catch {
-            print(error)
-        }
+        mPlayer.SetSpeed(to: 200)
         
         //Creating MainMenu Buttons
+        mPauseMenuTitle.name = "MenuTitle"
+        mPauseMenuTitle.size = CGSize(width: frame.midX, height: frame.midX / 3)
+        mPauseMenuTitle.position = CGPoint(x: -1000, y: 0)
+        mPauseMenuTitle.zPosition = 99
+        addChild(mPauseMenuTitle)
+        
         mPauseButton.name = mPauseButtonName
         mPauseButton.size = CGSize(width: frame.maxX / 10, height: frame.maxX / 10)
         mPauseButton.position = CGPoint(x: mPauseButton.frame.width / 2 + 10, y: frame.maxY - 10 - mPauseButton.frame.height / 2)
@@ -160,30 +192,45 @@ class GameScene: SKScene
         //let playSound = SKAction.playSoundFileNamed("ButtonClicks/Button-0001", waitForCompletion: true)
         //self.run(playSound)
         
-        mHealthBar.DecreaseNumberBarValue(by: 1)
+        //mHealthBar.DecreaseNumberBarValue(by: 1)
+        //mEnergyBar.IncreaseNumberBarValue(by: 1)
         
         for touch in touches
         {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches
+        {
+            let location = touch.location(in: self)
+            let touchedNode = atPoint(location)
             
-            if touchedNode.name == mPauseButtonName
+            if touchedNode.name == mPauseButtonName && !mStoreOpen
             {
                 TogglePauseMenu()
-                audioPlayer1.play()
+                mSoundSystem.PlaySound(sound: "Button-0000")
             }
             else if touchedNode.name == mButtons[0]
             {
                 TogglePauseMenu()
-                audioPlayer1.play()
+                mSoundSystem.PlaySound(sound: "Button-0000")
             }
             else if touchedNode.name == mButtons[1]
             {
-                audioPlayer1.play()
+                mOptionsMenu.ToggleOptionsMenu(to: true)
+                TogglePauseMenuSpecifc(to: false)
+                
+                mPauseButton.SetButtonState(value: false)
+                mStoreMenu.mStoreButton.SetButtonState(value: false)
+                
+                mSoundSystem.PlaySound(sound: "Button-0000")
             }
             else if touchedNode.name == mButtons[2]
             {
-                audioPlayer1.play()
+                mSoundSystem.PlaySound(sound: "Button-0000")
                 
                 ResetGameScene()
                 removeAllChildren()
@@ -191,11 +238,20 @@ class GameScene: SKScene
                 mMainMenuScene.scaleMode = .resizeFill
                 view?.presentScene(mMainMenuScene, transition: .fade(withDuration: 0.5))
             }
-        }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+            
+            if !mGamePaused
+            {
+                let NodePressedName = String(touchedNode.name ?? "None")
 
+                mStoreMenu.UpdateStoreMenu(pressed: NodePressedName)
+            }
+
+            if mGameOptionsMenu
+            {
+                let NodePressedName = String(touchedNode.name ?? "None")
+                mOptionsMenu.UpdateOptionsMenu(pressed: NodePressedName)
+            }
+        }
     }
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
@@ -222,35 +278,62 @@ class GameScene: SKScene
         
         //print(String(currentTime) + "    " + String(mPrevTime) + "     " + String(mDeltaTime))
         
-        if(!mGamePaused)
+        if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
         {
             
-            /*if let accelerometer = mMotionManager.accelerometerData
-            {
-                //physicsWorld.gravity = CGVector(dx: accelerometer.acceleration.y * -50, dy: accelerometer.acceleration.x*50)
-            }*/
-            
-            var playerPositionModifier = Vector2(x: 0, y: 0)
+            var playerRotVector = Vector2(x: 0, y: 0)
+            var playerAccVector = Vector2(x: 0, y: 0)
             
             if let gyroscope = mMotionManager.gyroData
             {
-                playerPositionModifier = Vector2(x: Float(gyroscope.rotationRate.x), y: Float(gyroscope.rotationRate.y))
+                playerRotVector = Vector2(x: Float(gyroscope.rotationRate.x), y: Float(gyroscope.rotationRate.y))
+            }
+            
+            if let accelerometer = mMotionManager.accelerometerData
+            {
+                //physicsWorld.gravity = CGVector(dx: accelerometer.acceleration.y * -50, dy: accelerometer.acceleration.x*50)
+                playerAccVector = Vector2(x: Float(-accelerometer.acceleration.y), y: Float(accelerometer.acceleration.x))
             }
             
             if mPlayer.GetAlive()
             {
-                mPlayer.UpdateMovementDirection(by: playerPositionModifier)
-                mPlayer.UpdatePlayer()
+                mPlayer.UpdateMovementDirection(rotation: playerRotVector, acceleration: playerAccVector)
+                mPlayer.UpdatePlayer(speed: 2)
             }
             
-            for cell in mPoolSystem.GetWhiteBloodCells()
+            //Updating White Blood Cells
+            for WhiteBloodCellInstance in mPoolSystem.GetWhiteBloodCells()
             {
-                if cell.GetAlive()
+                if WhiteBloodCellInstance.GetAlive()
                 {
-                    cell.MoveTowards(target: CGPoint(x: 0, y: 0))
+                    WhiteBloodCellInstance.MoveTowards(target: mPlayer.GetPosition())
+                    WhiteBloodCellInstance.Update(rotationSpeed: 1)
+                    WhiteBloodCellInstance.CheckCollisionWithPlayer(player: mPlayer)
                 }
             }
             
+            if mPoolSystem.GetNumberOfWhiteBloodCellsAlive() < 3
+            {
+                let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
+                WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: 100, height: 100), otherCells: mPoolSystem.GetWhiteBloodCells())
+                WhiteBloodCell.SetSpeed(to: Float(Int.random(in: 60...100)))
+            }
+            
+            //Update Energy Balls
+            for EnergyBallInstance in mPoolSystem.GetEnergyBalls()
+            {
+                if EnergyBallInstance.GetAlive()
+                {
+                    EnergyBallInstance.CheckCollisionWithPlayer(player: mPlayer)
+                }
+            }
+            
+            if mPoolSystem.GetNumberOfEnergyBallsAlive() < 10
+            {
+                let EnergyToSpawn = mPoolSystem.GetNextAvailableEnergyBall()
+                EnergyToSpawn.Spawn(with: Int.random(in: 1...5), otherCells: mPoolSystem.GetEnergyBalls())
+            }
+         
         }
         else
         {
@@ -258,7 +341,7 @@ class GameScene: SKScene
         }
         
     }
- 
+    
     func TogglePauseMenu()
     {
         mGamePaused = !mGamePaused
@@ -271,11 +354,15 @@ class GameScene: SKScene
         
         if mGamePaused
         {
+            mStoreMenu.mStoreButton.SetButtonState(value: false)
             mPauseBackground.size = CGSize(width: frame.maxX, height: frame.maxY)
+            mPauseMenuTitle.position = CGPoint(x: frame.midX, y: frame.maxY - mPauseMenuTitle.frame.height / 1.5)
         }
         else
         {
+            mStoreMenu.mStoreButton.SetButtonState(value: true)
             mPauseBackground.size = CGSize(width: 0, height: 0)
+            mPauseMenuTitle.position = CGPoint(x: -1000, y: 0)
         }
     }
  
@@ -291,11 +378,15 @@ class GameScene: SKScene
         
         if mGamePaused
         {
+            mStoreMenu.mStoreButton.SetButtonState(value: false)
             mPauseBackground.size = CGSize(width: frame.maxX, height: frame.maxY)
+            mPauseMenuTitle.position = CGPoint(x: frame.midX, y: frame.maxY - mPauseMenuTitle.frame.height / 1.5)
         }
         else
         {
+            mStoreMenu.mStoreButton.SetButtonState(value: true)
             mPauseBackground.size = CGSize(width: 0, height: 0)
+            mPauseMenuTitle.position = CGPoint(x: -1000, y: 0)
         }
     }
     
@@ -304,9 +395,12 @@ class GameScene: SKScene
         mPoolSystem.ResetPools()
         
         TogglePauseMenuSpecifc(to: false)
+        mStoreMenu.ToggleStoreMenu(to: false)
         
         mHealthBar.SetNumberBarValue(to: mHealthBar.mNumberBarMax)
-        mEnergyBar.SetNumberBarValue(to: mEnergyBar.mNumberBarMax)
+        mEnergyBar.SetNumberBarValue(to: 0)
+        
+        mScore = 0
         
         mScoreLabel.text = "SCORE: 0"
     }
@@ -318,6 +412,29 @@ class GameScene: SKScene
  
     func ShakeDevice()
     {
+        if mPlayer.GetEnergy() >= mPlayer.GetMaxEnergy()
+        {
+            
+            mPlayer.SetEnergy(to: CGFloat(0))
+            
+            if let mShakeParticle = SKEmitterNode(fileNamed: "ShakeEffect")
+            {
+                mShakeParticle.position = CGPoint(x: frame.midX, y: frame.midY)
+                addChild(mShakeParticle)
+
+                let removeAfterDead = SKAction.sequence([SKAction.wait(forDuration: 1), SKAction.removeFromParent()])
+                mShakeParticle.run(removeAfterDead)
+            }
+            
+            for WhiteBloodCellInstance in mPoolSystem.GetWhiteBloodCells()
+            {
+                if WhiteBloodCellInstance.GetAlive()
+                {
+                    WhiteBloodCellInstance.DestroyWhiteBloodCell()
+                }
+            }
+            
+        }
         
     }
     

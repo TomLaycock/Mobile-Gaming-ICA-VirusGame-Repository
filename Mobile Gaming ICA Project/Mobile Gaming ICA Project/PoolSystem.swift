@@ -18,6 +18,7 @@ class PoolSystem
     var mEnergyBallPool : [EnergyBall] = []
     var mWhiteBloodCellPool : [WhiteBloodCell] = []
     
+    var UniqueIDs = 0
     
     //Pool Functionality
     func SetupPoolSystem(scene Scene: GameScene)
@@ -28,14 +29,17 @@ class PoolSystem
         {
             let newEnergyBall = EnergyBall(imageNamed: "Assets/Energy/BasicFood")
             newEnergyBall.InitialiseEnergyBall(scene: self.mGameScene)
+            newEnergyBall.SetUniqueID(to: UniqueIDs)
             self.mEnergyBallPool.append(newEnergyBall)
+            UniqueIDs = UniqueIDs + 1
         }
         
         for _ in 1...10
         {
-            let newWhiteBloodCell = WhiteBloodCell(back: "Assets/Viruses/WhiteBloodCell-0000-SpikesOnly", front: "Assets/Viruses/WhiteBloodCell-0000-BodyOnly", speed: Float(1))
+            let newWhiteBloodCell = WhiteBloodCell(back: "Assets/Viruses/WhiteBloodCell-0000-SpikesOnly", front: "Assets/Viruses/WhiteBloodCell-0000-BodyOnly", speed: Float(1), id: UniqueIDs)
             newWhiteBloodCell.InitialiseWhiteBloodCell(scene: Scene, name: "WhiteBloodCell", zposition: 7)
             self.mWhiteBloodCellPool.append(newWhiteBloodCell)
+            UniqueIDs = UniqueIDs + 1
         }
     }
     
@@ -80,7 +84,9 @@ class PoolSystem
         
         let newEnergyBall = EnergyBall(imageNamed: "Assets/Energy/BasicFood")
         newEnergyBall.InitialiseEnergyBall(scene: self.mGameScene)
+        newEnergyBall.SetUniqueID(to: UniqueIDs)
         self.mEnergyBallPool.append(newEnergyBall)
+        UniqueIDs = UniqueIDs + 1
         
         return newEnergyBall
         
@@ -96,9 +102,10 @@ class PoolSystem
             }
         }
         
-        let newWhiteBloodCell = WhiteBloodCell(back: "Assets/Viruses/WhiteBloodCell-0000-SpikesOnly", front: "Assets/Viruses/WhiteBloodCell-0000-BodyOnly", speed: Float(1))
+        let newWhiteBloodCell = WhiteBloodCell(back: "Assets/Viruses/WhiteBloodCell-0000-SpikesOnly", front: "Assets/Viruses/WhiteBloodCell-0000-BodyOnly", speed: Float(1), id: UniqueIDs)
         newWhiteBloodCell.InitialiseWhiteBloodCell(scene: self.mGameScene, name: "WhiteBloodCell", zposition: 7)
         self.mWhiteBloodCellPool.append(newWhiteBloodCell)
+        UniqueIDs = UniqueIDs + 1
         
         return newWhiteBloodCell
     }
@@ -119,5 +126,34 @@ class PoolSystem
     func GetWhiteBloodCells() -> [WhiteBloodCell]
     {
         return self.mWhiteBloodCellPool
+    }
+    
+    //Alive Counts
+    func GetNumberOfEnergyBallsAlive() -> Int
+    {
+        var AliveCount = 0
+        for EnergyBallInstance in GetEnergyBalls()
+        {
+            if EnergyBallInstance.GetAlive()
+            {
+                AliveCount = AliveCount + 1
+            }
+        }
+        
+        return AliveCount
+    }
+    
+    func GetNumberOfWhiteBloodCellsAlive() -> Int
+    {
+        var AliveCount = 0
+        for Cell in GetWhiteBloodCells()
+        {
+            if Cell.GetAlive()
+            {
+                AliveCount = AliveCount + 1
+            }
+        }
+        
+        return AliveCount
     }
 }

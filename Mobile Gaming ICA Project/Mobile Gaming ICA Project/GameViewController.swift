@@ -15,10 +15,17 @@ class GameViewController: UIViewController {
     var mGameScene : GameScene!
     var mMainMenuScene : MainMenu!
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        if !defaults.bool(forKey: "FirstTimeLoad")
+        {
+            defaults.set(true, forKey: "FirstTimeLoad")
+            defaults.set(true, forKey: "AudioToggleValue")
+            defaults.set(false, forKey: "AltToggleValue")
+        }
         
         if let view = self.view as! SKView? {
             
