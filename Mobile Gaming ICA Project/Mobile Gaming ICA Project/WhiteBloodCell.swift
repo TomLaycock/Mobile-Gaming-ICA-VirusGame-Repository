@@ -63,10 +63,27 @@ class WhiteBloodCell : Cell
         let ScreenWidth = Int(mGameScene.frame.maxX)
         let ScreenHeight = Int(mGameScene.frame.maxY)
         
-        var newPos = CGPoint(x: Int.random(in: CellHalfWidth...Int(ScreenWidth - CellHalfWidth)), y: Int.random(in: CellHalfWidth...Int(ScreenHeight - CellHalfWidth)))
+        let RandAxis = Int.random(in: 0...1)
         
-        while CheckCollisionWithOtherCells(otherCells: Cells) {
-            newPos = CGPoint(x: Int.random(in: CellHalfWidth...Int(ScreenWidth - CellHalfWidth)), y: Int.random(in: CellHalfWidth...Int(ScreenHeight - CellHalfWidth)))
+        var newPos = CGPoint(x: 0, y: 0)
+
+        if RandAxis == 0
+        {
+            let randomSide = Int.random(in: 0...1)
+            newPos = CGPoint(x: -CellHalfWidth + (randomSide * (ScreenWidth + CellHalfWidth)), y: Int.random(in: CellHalfWidth...Int(ScreenHeight - CellHalfWidth)))
+            
+            while CheckCollisionWithOtherCells(otherCells: Cells) {
+                newPos = CGPoint(x: -CellHalfWidth + (randomSide * (ScreenWidth + CellHalfWidth)), y: Int.random(in: CellHalfWidth...Int(ScreenHeight - CellHalfWidth)))
+            }
+        }
+        else
+        {
+            let randomSide = Int.random(in: 0...1)
+            newPos = CGPoint(x: Int.random(in: CellHalfWidth...Int(ScreenWidth - CellHalfWidth)), y: -CellHalfWidth + (randomSide * (ScreenHeight + CellHalfWidth)))
+            
+            while CheckCollisionWithOtherCells(otherCells: Cells) {
+                newPos = CGPoint(x: Int.random(in: CellHalfWidth...Int(ScreenWidth - CellHalfWidth)), y: Int.random(in: CellHalfWidth...Int(ScreenHeight - CellHalfWidth)))
+            }
         }
         
         super.SetPosition(to: newPos)

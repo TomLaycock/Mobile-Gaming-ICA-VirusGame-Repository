@@ -66,6 +66,13 @@ class Cell
         self.SetZPosition(to: ZPosition)
         self.CallAddChild(scene: Scene)
     }
+    
+    func InitialiseCellMainMenu(scene Scene: MainMenu, name Name: String, zposition ZPosition: CGFloat)
+    {
+        self.SetName(to: Name)
+        self.SetZPosition(to: ZPosition)
+        self.CallAddChild(scene: Scene)
+    }
  
     func GetPosition() -> CGPoint
     {

@@ -35,6 +35,10 @@
 		E25FEB3E257AD7A1000E3C04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E25FEB3C257AD7A1000E3C04 /* Assets.xcassets */; };
 		E25FEB40257ADB83000E3C04 /* BasicExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = E25FEB3F257ADB83000E3C04 /* BasicExplosion.sks */; };
 		E25FEB42257AFEF4000E3C04 /* ShakeEffect.sks in Resources */ = {isa = PBXBuildFile; fileRef = E25FEB41257AFEF4000E3C04 /* ShakeEffect.sks */; };
+		E26360D625802E0E00D948EA /* ProjectileExplosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = E26360D525802E0E00D948EA /* ProjectileExplosion.sks */; };
+		E26360D82580527600D948EA /* BossWhiteBloodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26360D72580527600D948EA /* BossWhiteBloodCell.swift */; };
+		E2787E1E257ED598008E95C3 /* Projectile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2787E1D257ED598008E95C3 /* Projectile.swift */; };
+		E2787E20257EE719008E95C3 /* MainMenuVirus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2787E1F257EE719008E95C3 /* MainMenuVirus.swift */; };
 		E2AF4FD3257D1E7700FE6430 /* OptionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF4FD2257D1E7700FE6430 /* OptionsMenu.swift */; };
 		E2AF4FD5257D4E0000FE6430 /* MainOptionsMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF4FD4257D4E0000FE6430 /* MainOptionsMenu.swift */; };
 		E2AF4FD9257D72D000FE6430 /* CustomSoundSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AF4FD8257D72D000FE6430 /* CustomSoundSystem.swift */; };
@@ -92,6 +96,10 @@
 		E25FEB3C257AD7A1000E3C04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E25FEB3F257ADB83000E3C04 /* BasicExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BasicExplosion.sks; sourceTree = "<group>"; };
 		E25FEB41257AFEF4000E3C04 /* ShakeEffect.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ShakeEffect.sks; sourceTree = "<group>"; };
+		E26360D525802E0E00D948EA /* ProjectileExplosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = ProjectileExplosion.sks; sourceTree = "<group>"; };
+		E26360D72580527600D948EA /* BossWhiteBloodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BossWhiteBloodCell.swift; sourceTree = "<group>"; };
+		E2787E1D257ED598008E95C3 /* Projectile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Projectile.swift; sourceTree = "<group>"; };
+		E2787E1F257EE719008E95C3 /* MainMenuVirus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuVirus.swift; sourceTree = "<group>"; };
 		E2AF4FD2257D1E7700FE6430 /* OptionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsMenu.swift; sourceTree = "<group>"; };
 		E2AF4FD4257D4E0000FE6430 /* MainOptionsMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainOptionsMenu.swift; sourceTree = "<group>"; };
 		E2AF4FD8257D72D000FE6430 /* CustomSoundSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSoundSystem.swift; sourceTree = "<group>"; };
@@ -153,6 +161,7 @@
 				E210E80A2577F83F008CF32B /* Button.swift */,
 				E210E8082577F83F008CF32B /* Cell.swift */,
 				E2AF4FD8257D72D000FE6430 /* CustomSoundSystem.swift */,
+				E2787E1D257ED598008E95C3 /* Projectile.swift */,
 				E210E80E2577F83F008CF32B /* EnergyBall.swift */,
 				E210E8122577F840008CF32B /* GameScene.sks */,
 				E210E80B2577F83F008CF32B /* GameScene.swift */,
@@ -163,10 +172,12 @@
 				E210E8112577F840008CF32B /* GameViewController.swift */,
 				E210E80C2577F83F008CF32B /* MainMenu.sks */,
 				E210E80F2577F840008CF32B /* NumberBar.swift */,
+				E2787E1F257EE719008E95C3 /* MainMenuVirus.swift */,
 				E210E80D2577F83F008CF32B /* Player.swift */,
 				E210E8102577F840008CF32B /* PoolSystem.swift */,
 				E210E8092577F83F008CF32B /* Utility.swift */,
 				E210E8132577F840008CF32B /* WhiteBloodCell.swift */,
+				E26360D72580527600D948EA /* BossWhiteBloodCell.swift */,
 				E210E7C32577F689008CF32B /* AppDelegate.swift */,
 				E210E7C72577F689008CF32B /* Actions.sks */,
 				E210E7CD2577F689008CF32B /* Main.storyboard */,
@@ -210,6 +221,7 @@
 				E25FEB3C257AD7A1000E3C04 /* Assets.xcassets */,
 				E25FEB3F257ADB83000E3C04 /* BasicExplosion.sks */,
 				E25FEB41257AFEF4000E3C04 /* ShakeEffect.sks */,
+				E26360D525802E0E00D948EA /* ProjectileExplosion.sks */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -329,6 +341,7 @@
 				E210E7C82577F689008CF32B /* Actions.sks in Resources */,
 				E210E8182577F840008CF32B /* MainMenu.sks in Resources */,
 				E210E8052577F783008CF32B /* Assets in Resources */,
+				E26360D625802E0E00D948EA /* ProjectileExplosion.sks in Resources */,
 				E25FEB42257AFEF4000E3C04 /* ShakeEffect.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,7 +372,9 @@
 				E25FEB37257ABEF0000E3C04 /* GameStoreMenu.swift in Sources */,
 				E210E8162577F840008CF32B /* Button.swift in Sources */,
 				E210E8152577F840008CF32B /* Utility.swift in Sources */,
+				E2787E1E257ED598008E95C3 /* Projectile.swift in Sources */,
 				E2AF4FD3257D1E7700FE6430 /* OptionsMenu.swift in Sources */,
+				E2787E20257EE719008E95C3 /* MainMenuVirus.swift in Sources */,
 				E210E7C42577F689008CF32B /* AppDelegate.swift in Sources */,
 				E210E8192577F840008CF32B /* Player.swift in Sources */,
 				E210E8072577F7FE008CF32B /* MainMenu.swift in Sources */,
@@ -369,6 +384,7 @@
 				E2AF4FD5257D4E0000FE6430 /* MainOptionsMenu.swift in Sources */,
 				E210E81C2577F840008CF32B /* PoolSystem.swift in Sources */,
 				E210E81D2577F840008CF32B /* GameViewController.swift in Sources */,
+				E26360D82580527600D948EA /* BossWhiteBloodCell.swift in Sources */,
 				E210E81B2577F840008CF32B /* NumberBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

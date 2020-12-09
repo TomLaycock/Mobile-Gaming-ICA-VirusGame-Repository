@@ -15,7 +15,10 @@ class MainMenu: SKScene {
     
     var mGameScene : GameScene!
     
-    let mGameTitle = "Assets/MenuTextures/GameTitle"
+    var mDeltaTime = Double(0)
+    var mPrevTime = Double(0)
+    
+    let mGameTitle = "Assets/MenuTextures/GameTitle-TB"
     let mButtons = ["PlayButton-TB", "OptionsButton-TB"]
     
     let mOptionsMenu = MainOptionsMenu()
@@ -25,6 +28,10 @@ class MainMenu: SKScene {
     
     var mOptionsMenuActive = false
     
+    //Background Cells
+    var mViruses : [MainMenuVirus] = []
+    
+    //User Save Options
     let defaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
@@ -35,6 +42,26 @@ class MainMenu: SKScene {
         {
             mOptionsMenu.SetupGameOptionsMenu(scene: self, audioOn: defaults.bool(forKey: "AudioToggleValue"), altOn: defaults.bool(forKey: "AltToggleValue"))
             mSoundSystem.SetupCustomSoundSystem()
+            
+            for i in 1...8
+            {
+                let randomChoice = Int.random(in: 0...1)
+                
+                if randomChoice == 1 { continue }
+                
+                for j in 1...4
+                {
+                    let randomNum = Int.random(in: 0...2)
+                    let newMainMenuVirus = MainMenuVirus(back: "Assets/Viruses/Virus-000" + String(randomNum) + "-SpikesOnly", front: "Assets/Viruses/Virus-000" + String(randomNum) + "-BodyOnly", speed: 100)
+                    newMainMenuVirus.SpawnMainMenuVirus(at: CGPoint(x: ((frame.maxX / 8) * CGFloat(i)) - (frame.maxX / 20), y: (frame.maxY / 4) * CGFloat(j) + CGFloat(Int.random(in: Int(-frame.maxX / 20)...Int(frame.maxX / 20)))))
+                    mViruses.append(newMainMenuVirus)
+                }
+            }
+        }
+        
+        for virus in self.mViruses
+        {
+            virus.InitialiseMainMenuVirus(scene: self, zposition: 20)
         }
         
         mOptionsMenu.InitialiseOptionsMenu()
@@ -70,12 +97,12 @@ class MainMenu: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches
+        /*for touch in touches
         {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
-        }
+        }*/
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -111,7 +138,28 @@ class MainMenu: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
+     
+        if(mDeltaTime == 0)
+        {
+            mDeltaTime = Double(0.015)
+            mPrevTime = currentTime
+        }
+        else
+        {
+            mDeltaTime = currentTime - mPrevTime
+            mPrevTime = currentTime
+        }
         
+        for virus in self.mViruses
+        {
+            virus.Update(rotationSpeed: 2)
+        }
+
+    }
+    
+    func GetDeltaTime() -> Double
+    {
+        return self.mDeltaTime
     }
     
 }

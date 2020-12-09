@@ -17,6 +17,9 @@ class PoolSystem
     
     var mEnergyBallPool : [EnergyBall] = []
     var mWhiteBloodCellPool : [WhiteBloodCell] = []
+    var mProjectileOnePool : [Projectile] = []
+    var mProjectileTwoPool : [Projectile] = []
+    var mProjectileThreePool : [Projectile] = []
     
     var UniqueIDs = 0
     
@@ -41,6 +44,27 @@ class PoolSystem
             self.mWhiteBloodCellPool.append(newWhiteBloodCell)
             UniqueIDs = UniqueIDs + 1
         }
+        
+        for _ in 1...10
+        {
+            let newProjectile = Projectile(imageNamed: "Assets/Projectiles/Projectile-0000")
+            newProjectile.InitialiseProjectile(scene: self.mGameScene)
+            self.mProjectileOnePool.append(newProjectile)
+        }
+        
+        for _ in 1...10
+        {
+            let newProjectile = Projectile(imageNamed: "Assets/Projectiles/Projectile-0001")
+            newProjectile.InitialiseProjectile(scene: self.mGameScene)
+            self.mProjectileTwoPool.append(newProjectile)
+        }
+        
+        for _ in 1...10
+        {
+            let newProjectile = Projectile(imageNamed: "Assets/Projectiles/Projectile-0002")
+            newProjectile.InitialiseProjectile(scene: self.mGameScene)
+            self.mProjectileThreePool.append(newProjectile)
+        }
     }
     
     func ReInitialise()
@@ -53,6 +77,21 @@ class PoolSystem
         for cell in self.mWhiteBloodCellPool
         {
             cell.InitialiseWhiteBloodCell(scene: self.mGameScene, name: "WhiteBloodCell", zposition: 7)
+        }
+        
+        for projectile in self.mProjectileOnePool
+        {
+            projectile.InitialiseProjectile(scene: self.mGameScene)
+        }
+        
+        for projectile in self.mProjectileTwoPool
+        {
+            projectile.InitialiseProjectile(scene: self.mGameScene)
+        }
+        
+        for projectile in self.mProjectileThreePool
+        {
+            projectile.InitialiseProjectile(scene: self.mGameScene)
         }
     }
     
@@ -67,6 +106,21 @@ class PoolSystem
         for cell in self.mWhiteBloodCellPool
         {
             cell.DestroyWhiteBloodCell()
+        }
+        
+        for projectile in self.mProjectileOnePool
+        {
+            projectile.DeactivateProjectile()
+        }
+        
+        for projectile in self.mProjectileTwoPool
+        {
+            projectile.DeactivateProjectile()
+        }
+        
+        for projectile in self.mProjectileThreePool
+        {
+            projectile.DeactivateProjectile()
         }
     }
     
@@ -110,6 +164,57 @@ class PoolSystem
         return newWhiteBloodCell
     }
     
+    func GetNextAvailableProjectileOne() -> Projectile
+    {
+        for projectile in self.mProjectileOnePool
+        {
+            if !projectile.GetAlive()
+            {
+                return projectile
+            }
+        }
+        
+        let newProjectile = Projectile(imageNamed: "Assets/Projectiles/Projectile-0000")
+        newProjectile.InitialiseProjectile(scene: self.mGameScene)
+        self.mProjectileOnePool.append(newProjectile)
+        
+        return newProjectile
+    }
+    
+    func GetNextAvailableProjectileTwo() -> Projectile
+    {
+        for projectile in self.mProjectileTwoPool
+        {
+            if !projectile.GetAlive()
+            {
+                return projectile
+            }
+        }
+        
+        let newProjectile = Projectile(imageNamed: "Assets/Projectiles/Projectile-0001")
+        newProjectile.InitialiseProjectile(scene: self.mGameScene)
+        self.mProjectileTwoPool.append(newProjectile)
+        
+        return newProjectile
+    }
+    
+    func GetNextAvailableProjectileThree() -> Projectile
+    {
+        for projectile in self.mProjectileThreePool
+        {
+            if !projectile.GetAlive()
+            {
+                return projectile
+            }
+        }
+        
+        let newProjectile = Projectile(imageNamed: "Assets/Projectiles/Projectile-0002")
+        newProjectile.InitialiseProjectile(scene: self.mGameScene)
+        self.mProjectileThreePool.append(newProjectile)
+        
+        return newProjectile
+    }
+    
     
     
     /*
@@ -126,6 +231,21 @@ class PoolSystem
     func GetWhiteBloodCells() -> [WhiteBloodCell]
     {
         return self.mWhiteBloodCellPool
+    }
+    
+    func GetProjectileOnePool() -> [Projectile]
+    {
+        return self.mProjectileOnePool
+    }
+    
+    func GetProjectileTwoPool() -> [Projectile]
+    {
+        return self.mProjectileTwoPool
+    }
+    
+    func GetProjectileThreePool() -> [Projectile]
+    {
+        return self.mProjectileThreePool
     }
     
     //Alive Counts

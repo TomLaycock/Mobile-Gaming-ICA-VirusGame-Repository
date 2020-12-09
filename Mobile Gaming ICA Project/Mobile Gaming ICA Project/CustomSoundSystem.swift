@@ -14,6 +14,9 @@ class CustomSoundSystem
 {
 
     var mSoundDict = Dictionary<String, AVAudioPlayer>()
+
+    //User Save Values
+    let defaults = UserDefaults.standard
     
     func SetupCustomSoundSystem()
     {
@@ -27,6 +30,8 @@ class CustomSoundSystem
     
     func PlaySound(sound Sound: String)
     {
+        if !defaults.bool(forKey: "AudioToggleValue") { return }
+        
         if mSoundDict[Sound] != nil
         {
             mSoundDict[Sound]?.play()
@@ -35,7 +40,7 @@ class CustomSoundSystem
     
     func PlaySoundOverlap(sound SOund: String)
     {
-        
+        if !defaults.bool(forKey: "AudioToggleValue") { return }
     }
     
 }

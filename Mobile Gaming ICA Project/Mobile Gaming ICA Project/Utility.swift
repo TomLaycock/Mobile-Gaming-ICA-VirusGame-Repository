@@ -46,3 +46,10 @@ extension Vector2
         return Vector2(x: Float(CGFloat(v.x) / magnitude(v: v)), y: Float(CGFloat(v.y) / magnitude(v: v)))
     }
 }
+
+extension CGPoint
+{
+    static func +(v1: CGPoint, v2: CGPoint) -> CGPoint {
+        return CGPoint(x: v1.x + v2.x, y: v1.y + v2.y)
+    }
+}

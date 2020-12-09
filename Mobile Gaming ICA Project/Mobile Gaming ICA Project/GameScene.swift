@@ -17,6 +17,9 @@ class GameScene: SKScene
 
     var mPlayer : Player!
     
+    var mTouchPointOne = CGPoint(x: -1000, y: -1000)
+    var mTouchPointTwo = CGPoint(x: -1000, y: -1000)
+    
     //Game UI
     let mOptionsMenu = OptionsMenu()
     let mStoreMenu = GameStoreMenu()
@@ -37,6 +40,16 @@ class GameScene: SKScene
     
     let mHealthBar = NumberBar(Start: 100, Max: 100, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/GreenSquare", Lentgh: 200, Height: 35)
     let mEnergyBar = NumberBar(Start: 0, Max: 100, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/blueSquare", Lentgh: 200, Height: 35)
+    
+    var mSelectedProjectile = 0
+    
+    let mProjectileOneSelectionButton = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0000")
+    let mProjectileTwoSelectionButton = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0001")
+    let mProjectileThreeSelectionButton = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0002")
+    
+    let mProjectileOneQuantityLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
+    let mProjectileTwoQuantityLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
+    let mProjectileThreeQuantityLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
     
     //Alternate Controlls
     let mShakeControl = SKSpriteNode(imageNamed: "Assets/OtherInput/ShakeInput")
@@ -155,7 +168,7 @@ class GameScene: SKScene
         mPauseBackground.position = CGPoint(x: frame.midX, y: frame.midY)
         mPauseBackground.size = CGSize(width: 0, height: 0)
         mPauseBackground.zPosition = 99
-        mPauseBackground.alpha = 0.5
+        mPauseBackground.alpha = 0.8
         addChild(mPauseBackground)
         
         //Game UI
@@ -177,7 +190,50 @@ class GameScene: SKScene
         addChild(mEnergyBar.GetBarBackground())
         addChild(mEnergyBar.GetBarForeground())
         addChild(mEnergyBar.GetBarText())
+        
+        let ProjectileButtonsSize = CGFloat(50)
+        mProjectileOneSelectionButton.position = CGPoint(x: frame.maxX  + (-ProjectileButtonsSize * 3) - 20, y: frame.maxY - ProjectileButtonsSize)
+        mProjectileOneSelectionButton.zPosition = 90
+        mProjectileOneSelectionButton.size = CGSize(width: ProjectileButtonsSize, height: ProjectileButtonsSize)
+        mProjectileOneSelectionButton.name = "ProjectileButtonOne"
+        addChild(mProjectileOneSelectionButton)
+        
+        mProjectileTwoSelectionButton.position = CGPoint(x: frame.maxX + (-ProjectileButtonsSize * 2) - 10, y: frame.maxY - ProjectileButtonsSize)
+        mProjectileTwoSelectionButton.zPosition = 90
+        mProjectileTwoSelectionButton.size = CGSize(width: ProjectileButtonsSize, height: ProjectileButtonsSize)
+        mProjectileTwoSelectionButton.name = "ProjectileButtonTwo"
+        addChild(mProjectileTwoSelectionButton)
+        
+        mProjectileThreeSelectionButton.position = CGPoint(x: frame.maxX - ProjectileButtonsSize, y: frame.maxY - ProjectileButtonsSize)
+        mProjectileThreeSelectionButton.zPosition = 90
+        mProjectileThreeSelectionButton.size = CGSize(width: ProjectileButtonsSize, height: ProjectileButtonsSize)
+        mProjectileThreeSelectionButton.name = "ProjectileButtonThree"
+        addChild(mProjectileThreeSelectionButton)
 
+        mProjectileOneQuantityLabel.fontSize = 25
+        mProjectileOneQuantityLabel.position = CGPoint(x: frame.maxX + (-ProjectileButtonsSize * 3) - 20, y: frame.maxY - (ProjectileButtonsSize / 2))
+        mProjectileOneQuantityLabel.text = "0"
+        mProjectileOneQuantityLabel.zPosition = 91
+        mProjectileOneQuantityLabel.horizontalAlignmentMode = .center
+        mProjectileOneQuantityLabel.isUserInteractionEnabled = false
+        addChild(mProjectileOneQuantityLabel)
+        
+        mProjectileTwoQuantityLabel.fontSize = 25
+        mProjectileTwoQuantityLabel.position = CGPoint(x: frame.maxX + (-ProjectileButtonsSize * 2) - 10, y: frame.maxY - (ProjectileButtonsSize / 2))
+        mProjectileTwoQuantityLabel.text = "0"
+        mProjectileTwoQuantityLabel.zPosition = 91
+        mProjectileTwoQuantityLabel.horizontalAlignmentMode = .center
+        mProjectileTwoQuantityLabel.isUserInteractionEnabled = false
+        addChild(mProjectileTwoQuantityLabel)
+        
+        mProjectileThreeQuantityLabel.fontSize = 25
+        mProjectileThreeQuantityLabel.position = CGPoint(x: frame.maxX - ProjectileButtonsSize, y: frame.maxY - (ProjectileButtonsSize / 2))
+        mProjectileThreeQuantityLabel.text = "0"
+        mProjectileThreeQuantityLabel.zPosition = 91
+        mProjectileThreeQuantityLabel.horizontalAlignmentMode = .center
+        mProjectileThreeQuantityLabel.isUserInteractionEnabled = false
+        addChild(mProjectileThreeQuantityLabel)
+        
         print("UI Setup Complete")
         
         mMotionManager.startAccelerometerUpdates()
@@ -185,6 +241,80 @@ class GameScene: SKScene
         
         mGameSetupComplete = true
         
+        
+        /*let swipeRight : UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.Swipe))
+        swipeRight.direction = .right
+
+        view.addGestureRecognizer(swipeRight)*/
+        
+    }
+    
+    /*@objc func Swipe(sender: UISwipeGestureRecognizer) {
+
+        print(sender.location(in: view))
+        //print(sender.location(ofTouch: , in: view))
+        print("Object has been swiped")
+
+    }*/
+
+    func GetNextProjectile() -> Projectile
+    {
+        if mSelectedProjectile == 0
+        {
+            mStoreMenu.mProjectileOneQuantity = mStoreMenu.mProjectileOneQuantity - 1
+            return mPoolSystem.GetNextAvailableProjectileOne()
+        }
+        else if mSelectedProjectile == 1
+        {
+            mStoreMenu.mProjectileTwoQuantity = mStoreMenu.mProjectileTwoQuantity - 1
+            return mPoolSystem.GetNextAvailableProjectileTwo()
+        }
+        else if mSelectedProjectile == 2
+        {
+            mStoreMenu.mProjectileThreeQuantity = mStoreMenu.mProjectileThreeQuantity - 1
+            return mPoolSystem.GetNextAvailableProjectileThree()
+        }
+        
+        print("Selected Projectile Is Invalid - Returing Projectile One")
+        return mPoolSystem.GetNextAvailableProjectileOne()
+    }
+    
+    func SwipePerformed() -> Bool
+    {
+        
+        let SwipeRequiredDist = CGFloat(20)
+        let SwipeDist = Vector2.magnitude(v: Vector2(CGPoint: mTouchPointTwo) - Vector2(CGPoint: mTouchPointOne))
+        
+        if SwipeDist < SwipeRequiredDist
+        {
+            mTouchPointOne = CGPoint(x: -1000, y: -1000)
+            mTouchPointTwo = CGPoint(x: -1000, y: -1000)
+            
+            return false
+        }
+        
+        print("Firing Projectile")
+        
+        if mStoreMenu.mProjectileOneQuantity > 0 && mSelectedProjectile == 0 ||
+            mStoreMenu.mProjectileTwoQuantity > 0 && mSelectedProjectile == 1 ||
+            mStoreMenu.mProjectileThreeQuantity > 0 && mSelectedProjectile == 2
+        {
+            
+            let LaunchDirection = Vector2.normalise(v: Vector2(CGPoint: mTouchPointTwo) - Vector2(CGPoint: mTouchPointOne))
+            let projectileToLaunch = GetNextProjectile()
+            projectileToLaunch.Spawn(at: mPlayer.GetPosition(), dir: LaunchDirection, with: mSelectedProjectile + 1, speed: 450)
+            
+            mTouchPointOne = CGPoint(x: -1000, y: -1000)
+            mTouchPointTwo = CGPoint(x: -1000, y: -1000)
+            
+            return true
+            
+        }
+        
+        mTouchPointOne = CGPoint(x: -1000, y: -1000)
+        mTouchPointTwo = CGPoint(x: -1000, y: -1000)
+        
+        return false
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -198,7 +328,11 @@ class GameScene: SKScene
         for touch in touches
         {
             let location = touch.location(in: self)
-            let touchedNode = atPoint(location)
+            //let touchedNode = atPoint(location)
+            if mTouchPointOne == CGPoint(x: -1000, y: -1000)
+            {
+                mTouchPointOne = location
+            }
         }
     }
     
@@ -208,17 +342,27 @@ class GameScene: SKScene
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
+            if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
+            {
+                mTouchPointTwo = location
+                
+                let SwipePerformedValue = SwipePerformed()
+                
+                if SwipePerformedValue { return }
+            }
+            
+            //Menu Buttons
             if touchedNode.name == mPauseButtonName && !mStoreOpen
             {
                 TogglePauseMenu()
                 mSoundSystem.PlaySound(sound: "Button-0000")
             }
-            else if touchedNode.name == mButtons[0]
+            else if touchedNode.name == mButtons[0] //Resume Game
             {
                 TogglePauseMenu()
                 mSoundSystem.PlaySound(sound: "Button-0000")
             }
-            else if touchedNode.name == mButtons[1]
+            else if touchedNode.name == mButtons[1] //Options Menu
             {
                 mOptionsMenu.ToggleOptionsMenu(to: true)
                 TogglePauseMenuSpecifc(to: false)
@@ -228,7 +372,7 @@ class GameScene: SKScene
                 
                 mSoundSystem.PlaySound(sound: "Button-0000")
             }
-            else if touchedNode.name == mButtons[2]
+            else if touchedNode.name == mButtons[2] //Return to main menu
             {
                 mSoundSystem.PlaySound(sound: "Button-0000")
                 
@@ -237,6 +381,20 @@ class GameScene: SKScene
                 
                 mMainMenuScene.scaleMode = .resizeFill
                 view?.presentScene(mMainMenuScene, transition: .fade(withDuration: 0.5))
+            }
+            
+            //Projectiles
+            if touchedNode.name == "ProjectileButtonOne"
+            {
+                mSelectedProjectile = 0
+            }
+            else if touchedNode.name == "ProjectileButtonTwo"
+            {
+                mSelectedProjectile = 1
+            }
+            else if touchedNode.name == "ProjectileButtonThree"
+            {
+                mSelectedProjectile = 2
             }
             
             if !mGamePaused
@@ -250,6 +408,12 @@ class GameScene: SKScene
             {
                 let NodePressedName = String(touchedNode.name ?? "None")
                 mOptionsMenu.UpdateOptionsMenu(pressed: NodePressedName)
+            }
+            
+            //If player has chosen to use touch controls instead
+            if defaults.bool(forKey: "AltToggleValue")
+            {
+                
             }
         }
     }
@@ -284,15 +448,21 @@ class GameScene: SKScene
             var playerRotVector = Vector2(x: 0, y: 0)
             var playerAccVector = Vector2(x: 0, y: 0)
             
-            if let gyroscope = mMotionManager.gyroData
+            //If Device motion Controlls Are Enabled
+            if !defaults.bool(forKey: "AltToggleValue")
             {
-                playerRotVector = Vector2(x: Float(gyroscope.rotationRate.x), y: Float(gyroscope.rotationRate.y))
-            }
             
-            if let accelerometer = mMotionManager.accelerometerData
-            {
-                //physicsWorld.gravity = CGVector(dx: accelerometer.acceleration.y * -50, dy: accelerometer.acceleration.x*50)
-                playerAccVector = Vector2(x: Float(-accelerometer.acceleration.y), y: Float(accelerometer.acceleration.x))
+                if let gyroscope = mMotionManager.gyroData
+                {
+                    playerRotVector = Vector2(x: Float(gyroscope.rotationRate.x), y: Float(gyroscope.rotationRate.y))
+                }
+                
+                if let accelerometer = mMotionManager.accelerometerData
+                {
+                    //physicsWorld.gravity = CGVector(dx: accelerometer.acceleration.y * -50, dy: accelerometer.acceleration.x*50)
+                    playerAccVector = Vector2(x: Float(-accelerometer.acceleration.y), y: Float(accelerometer.acceleration.x))
+                }
+                
             }
             
             if mPlayer.GetAlive()
@@ -334,6 +504,34 @@ class GameScene: SKScene
                 EnergyToSpawn.Spawn(with: Int.random(in: 1...5), otherCells: mPoolSystem.GetEnergyBalls())
             }
          
+            //---------------------------------------------------------------------------------//
+            //-------------------------------- Update Projectiles -----------------------------//
+            //---------------------------------------------------------------------------------//
+            
+            for projectile in mPoolSystem.GetProjectileOnePool()
+            {
+                if !projectile.GetAlive() { continue }
+                
+                projectile.Update()
+                projectile.CheckCollisionWithWhiteBloodCells(cells: mPoolSystem.GetWhiteBloodCells())
+            }
+            
+            for projectile in mPoolSystem.GetProjectileTwoPool()
+            {
+                if !projectile.GetAlive() { continue }
+                
+                projectile.Update()
+                projectile.CheckCollisionWithWhiteBloodCells(cells: mPoolSystem.GetWhiteBloodCells())
+            }
+            
+            for projectile in mPoolSystem.GetProjectileThreePool()
+            {
+                if !projectile.GetAlive() { continue }
+                
+                projectile.Update()
+                projectile.CheckCollisionWithWhiteBloodCells(cells: mPoolSystem.GetWhiteBloodCells())
+            }
+            
         }
         else
         {
@@ -365,7 +563,7 @@ class GameScene: SKScene
             mPauseMenuTitle.position = CGPoint(x: -1000, y: 0)
         }
     }
- 
+    
     func TogglePauseMenuSpecifc(to Value: Bool)
     {
         mGamePaused = Value
