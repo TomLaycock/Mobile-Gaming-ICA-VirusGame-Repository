@@ -90,8 +90,15 @@ class WhiteBloodCell : Cell
         super.SetSize(to: Size)
     }
     
-    func DestroyWhiteBloodCell()
+    func DestroyWhiteBloodCell(playSound PlaySound: Bool)
     {
+        if PlaySound
+        {
+            mGameScene.mSoundSystem.PlaySoundOverlap(sound: "Cell Death")
+        }
+        
+        mGameScene.mNumberOfWhiteBloodCellsKilled = mGameScene.mNumberOfWhiteBloodCellsKilled + 1
+        
         if let mDestroyParticle = SKEmitterNode(fileNamed: "BasicExplosion")
         {
             mDestroyParticle.position = CGPoint(x: self.GetPosition().x, y: self.GetPosition().y)
@@ -168,7 +175,7 @@ class WhiteBloodCell : Cell
         if Vector2.magnitude(v: Vector2(CGPoint: Player.GetPosition()) - Vector2(CGPoint: self.GetPosition())) < Player.mCellBackground.size.width / 2
         {
             Player.DecreaseHealth(by: CGFloat(5))
-            self.DestroyWhiteBloodCell()
+            self.DestroyWhiteBloodCell(playSound: true)
         }
     }
     

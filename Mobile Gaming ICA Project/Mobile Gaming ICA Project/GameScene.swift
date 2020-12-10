@@ -8,10 +8,18 @@ class GameScene: SKScene
  
     //Game Values
     var mMainMenuScene : MainMenu!
+    var mGameOverScene : GameOver!
     let mPoolSystem = PoolSystem()
     
     var mDeltaTime = Double(0)
     var mPrevTime = Double(0)
+    
+    var mHoldingTouch = false
+    var mPurchaseTimer = CGFloat(0)
+    var mPurchaseTimerTime = CGFloat(0.2)
+    
+    var mSwipeResetTimer = CGFloat(0)
+    var mSwipeResetTimerTime = CGFloat(0.5)
     
     let mMotionManager = CMMotionManager()
 
@@ -42,6 +50,7 @@ class GameScene: SKScene
     let mEnergyBar = NumberBar(Start: 0, Max: 100, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/blueSquare", Lentgh: 200, Height: 35)
     
     var mSelectedProjectile = 0
+    var mNumberOfWhiteBloodCellsKilled = 0
     
     let mProjectileOneSelectionButton = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0000")
     let mProjectileTwoSelectionButton = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0001")
@@ -167,7 +176,7 @@ class GameScene: SKScene
         
         mPauseBackground.position = CGPoint(x: frame.midX, y: frame.midY)
         mPauseBackground.size = CGSize(width: 0, height: 0)
-        mPauseBackground.zPosition = 99
+        mPauseBackground.zPosition = 98
         mPauseBackground.alpha = 0.8
         addChild(mPauseBackground)
         
@@ -293,12 +302,13 @@ class GameScene: SKScene
             return false
         }
         
-        print("Firing Projectile")
-        
+        //Fires Projectile
         if mStoreMenu.mProjectileOneQuantity > 0 && mSelectedProjectile == 0 ||
             mStoreMenu.mProjectileTwoQuantity > 0 && mSelectedProjectile == 1 ||
             mStoreMenu.mProjectileThreeQuantity > 0 && mSelectedProjectile == 2
         {
+            
+            mSoundSystem.PlaySoundOverlap(sound: "Projectile Shot")
             
             let LaunchDirection = Vector2.normalise(v: Vector2(CGPoint: mTouchPointTwo) - Vector2(CGPoint: mTouchPointOne))
             let projectileToLaunch = GetNextProjectile()
@@ -309,6 +319,10 @@ class GameScene: SKScene
             
             return true
             
+        }
+        else //Plays Small Click sound to signify no ammo
+        {
+            mSoundSystem.PlaySound(sound: "SmallClick")
         }
         
         mTouchPointOne = CGPoint(x: -1000, y: -1000)
@@ -327,10 +341,13 @@ class GameScene: SKScene
         
         for touch in touches
         {
+            mHoldingTouch = true
+            
             let location = touch.location(in: self)
             //let touchedNode = atPoint(location)
             if mTouchPointOne == CGPoint(x: -1000, y: -1000)
             {
+                mSwipeResetTimer = 0
                 mTouchPointOne = location
             }
         }
@@ -342,13 +359,20 @@ class GameScene: SKScene
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
+            mHoldingTouch = false;
+            
             if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
             {
                 mTouchPointTwo = location
                 
-                let SwipePerformedValue = SwipePerformed()
+                if mTouchPointOne != CGPoint(x: -1000, y: -1000)
+                {
                 
-                if SwipePerformedValue { return }
+                    let SwipePerformedValue = SwipePerformed()
+                    
+                    if SwipePerformedValue { return }
+                    
+                }
             }
             
             //Menu Buttons
@@ -386,14 +410,17 @@ class GameScene: SKScene
             //Projectiles
             if touchedNode.name == "ProjectileButtonOne"
             {
+                mSoundSystem.PlaySound(sound: "ProjectileSelect")
                 mSelectedProjectile = 0
             }
             else if touchedNode.name == "ProjectileButtonTwo"
             {
+                mSoundSystem.PlaySound(sound: "ProjectileSelect")
                 mSelectedProjectile = 1
             }
             else if touchedNode.name == "ProjectileButtonThree"
             {
+                mSoundSystem.PlaySound(sound: "ProjectileSelect")
                 mSelectedProjectile = 2
             }
             
@@ -429,6 +456,28 @@ class GameScene: SKScene
     override func update(_ currentTime: TimeInterval)
     {
         
+        if mPlayer.mHealth <= 0
+        {
+            mGameOverScene.ToggleGameOverScreenWin(value: false, score: mScore)
+            
+            ResetGameScene()
+            removeAllChildren()
+
+            mGameOverScene.scaleMode = .resizeFill
+            view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
+        }
+        
+        if mNumberOfWhiteBloodCellsKilled >= 20
+        {
+            mGameOverScene.ToggleGameOverScreenWin(value: true, score: mScore)
+            
+            ResetGameScene()
+            removeAllChildren()
+
+            mGameOverScene.scaleMode = .resizeFill
+            view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
+        }
+        
         if(mDeltaTime == 0)
         {
             mDeltaTime = Double(0.015)
@@ -441,6 +490,35 @@ class GameScene: SKScene
         }
         
         //print(String(currentTime) + "    " + String(mPrevTime) + "     " + String(mDeltaTime))
+        
+        if mStoreOpen && !mGamePaused
+        {
+            if mHoldingTouch
+            {
+                mPurchaseTimer = mPurchaseTimer + CGFloat(mDeltaTime)
+                
+                if mPurchaseTimer >= mPurchaseTimerTime
+                {
+                    mPurchaseTimer = 0
+                    
+                    let touchedNode = atPoint(mTouchPointOne)
+                    
+                    let NodePressedName = String(touchedNode.name ?? "None")
+
+                    mStoreMenu.UpdateStoreMenu(pressed: NodePressedName)
+                }
+            }
+        }
+        
+        //Reset Swipe First Touch if not been held
+        mSwipeResetTimer = mSwipeResetTimer + CGFloat(mDeltaTime)
+        if !mHoldingTouch
+        {
+            if mSwipeResetTimer >= mSwipeResetTimerTime
+            {
+                mTouchPointOne = CGPoint(x: -1000, y: -1000)
+            }
+        }
         
         if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
         {
@@ -599,6 +677,7 @@ class GameScene: SKScene
         mEnergyBar.SetNumberBarValue(to: 0)
         
         mScore = 0
+        mNumberOfWhiteBloodCellsKilled = 0
         
         mScoreLabel.text = "SCORE: 0"
     }
@@ -615,6 +694,8 @@ class GameScene: SKScene
             
             mPlayer.SetEnergy(to: CGFloat(0))
             
+            mSoundSystem.PlaySound(sound: "PowerUp")
+            
             if let mShakeParticle = SKEmitterNode(fileNamed: "ShakeEffect")
             {
                 mShakeParticle.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -628,7 +709,7 @@ class GameScene: SKScene
             {
                 if WhiteBloodCellInstance.GetAlive()
                 {
-                    WhiteBloodCellInstance.DestroyWhiteBloodCell()
+                    WhiteBloodCellInstance.DestroyWhiteBloodCell(playSound: false)
                 }
             }
             

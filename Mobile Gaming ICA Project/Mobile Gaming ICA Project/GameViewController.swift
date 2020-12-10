@@ -14,6 +14,7 @@ class GameViewController: UIViewController {
 
     var mGameScene : GameScene!
     var mMainMenuScene : MainMenu!
+    var mGameOver : GameOver!
     
     let defaults = UserDefaults.standard
     
@@ -41,8 +42,19 @@ class GameViewController: UIViewController {
                 scene.scaleMode = .resizeFill
             }
             
+            if let scene = GameOver(fileNamed: "GameOver")
+            {
+                mGameOver = scene
+                scene.scaleMode = .resizeFill
+            }
+            
             mMainMenuScene.mGameScene = mGameScene
+            
             mGameScene.mMainMenuScene = mMainMenuScene
+            mGameScene.mGameOverScene = mGameOver
+            
+            mGameOver.mGameScene = mGameScene
+            mGameOver.mMainMenu = mMainMenuScene
             
             view.presentScene(mMainMenuScene, transition: .fade(withDuration: 0.5))
             

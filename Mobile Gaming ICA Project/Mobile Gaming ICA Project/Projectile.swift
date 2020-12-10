@@ -80,11 +80,12 @@ class Projectile : SKSpriteNode {
             
             if Vector2.magnitude(v: Vector2(CGPoint: cell.GetPosition()) - Vector2(CGPoint: self.position)) < cell.mCellBackground.size.width / 2
             {
+                mGameScene.mSoundSystem.PlaySoundOverlap(sound: "Hit")
                 self.mGameScene.mScore = self.mGameScene.mScore + 5
                 self.DeactivateProjectile()
                 
                 mGameScene.mPlayer.IncreaseEnergy(by: CGFloat(5))
-                cell.DestroyWhiteBloodCell()
+                cell.DestroyWhiteBloodCell(playSound: true)
             }
         }
     }

@@ -105,7 +105,7 @@ class PoolSystem
         
         for cell in self.mWhiteBloodCellPool
         {
-            cell.DestroyWhiteBloodCell()
+            cell.DestroyWhiteBloodCell(playSound: false)
         }
         
         for projectile in self.mProjectileOnePool
