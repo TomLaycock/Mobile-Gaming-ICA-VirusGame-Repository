@@ -94,11 +94,9 @@ class WhiteBloodCell : Cell
     {
         if PlaySound
         {
-            mGameScene.mSoundSystem.PlaySoundOverlap(sound: "Cell Death")
+            mGameScene.mSoundSystem.PlaySound(sound: "Cell Death", scene: mGameScene)
         }
-        
-        mGameScene.mNumberOfWhiteBloodCellsKilled = mGameScene.mNumberOfWhiteBloodCellsKilled + 1
-        
+
         if let mDestroyParticle = SKEmitterNode(fileNamed: "BasicExplosion")
         {
             mDestroyParticle.position = CGPoint(x: self.GetPosition().x, y: self.GetPosition().y)
@@ -109,7 +107,9 @@ class WhiteBloodCell : Cell
         }
         
         self.mAlive = false
-        super.SetPosition(to: CGPoint(x: -100, y: 0))
+        super.SetPosition(to: CGPoint(x: -1000, y: -1000))
+        
+        mGameScene.mNumberOfWhiteBloodCellsKilled = mGameScene.mNumberOfWhiteBloodCellsKilled + 1
     }
     
     func GetAlive() -> Bool

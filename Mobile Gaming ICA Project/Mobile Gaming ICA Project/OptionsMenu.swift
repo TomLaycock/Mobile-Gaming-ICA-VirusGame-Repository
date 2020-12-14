@@ -44,6 +44,7 @@ class OptionsMenu
     {
         mAudioValue = mGameScene.defaults.bool(forKey: "AudioToggleValue")
         mAlternateControlsValue = mGameScene.defaults.bool(forKey: "AltToggleValue")
+        mGameScene.ToggleAlternateControlView(to: mAlternateControlsValue)
         
         mOptionsMenubackground.position = CGPoint(x: self.mGameScene.frame.midX, y: self.mGameScene.frame.midY)
         mOptionsMenubackground.size = CGSize(width: 0, height: 0)
@@ -166,7 +167,7 @@ class OptionsMenu
     {
         if NodeName == "Close Options Menu Button"
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mGameScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mGameScene)
             mGameScene.TogglePauseMenuSpecifc(to: true)
             ToggleOptionsMenu(to: false)
             
@@ -175,7 +176,7 @@ class OptionsMenu
         }
         else if NodeName == "Audio On Button"
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mGameScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mGameScene)
             mAudioValue = true
             mAudioToggleButtonOn.SetButtonState(value: false)
             mAudioToggleButtonOff.SetButtonState(value: true)
@@ -184,7 +185,7 @@ class OptionsMenu
         }
         else if NodeName == "Audio Off Button"
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mGameScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mGameScene)
             mAudioValue = false
             mAudioToggleButtonOn.SetButtonState(value: true)
             mAudioToggleButtonOff.SetButtonState(value: false)
@@ -193,7 +194,8 @@ class OptionsMenu
         }
         else if NodeName == "Alt On Button"
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mGameScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mGameScene)
+            mGameScene.ToggleAlternateControlView(to: true)
             mAlternateControlsValue = true
             mAlternateControlsButtonOn.SetButtonState(value: false)
             mAlternateControlsButtonOff.SetButtonState(value: true)
@@ -202,7 +204,8 @@ class OptionsMenu
         }
         else if NodeName == "Alt Off Button"
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mGameScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mGameScene)
+            mGameScene.ToggleAlternateControlView(to: false)
             mAlternateControlsValue = false
             mAlternateControlsButtonOn.SetButtonState(value: true)
             mAlternateControlsButtonOff.SetButtonState(value: false)

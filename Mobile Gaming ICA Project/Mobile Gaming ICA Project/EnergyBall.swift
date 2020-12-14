@@ -98,7 +98,7 @@ class EnergyBall : SKSpriteNode {
     {
         if Vector2.magnitude(v: Vector2(CGPoint: Player.GetPosition()) - Vector2(CGPoint: self.position)) < Player.mCellBackground.size.width / 2
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "SmallClick")
+            mGameScene.mSoundSystem.PlaySound(sound: "Small Click", scene: mGameScene)
             self.mGameScene.mScore = self.mGameScene.mScore + self.GetEnergyToProvide()
             self.Consume()
             

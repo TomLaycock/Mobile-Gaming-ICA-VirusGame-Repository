@@ -123,7 +123,7 @@ class GameOver: SKScene {
             
             if touchedNode.name == "Play Again"
             {
-                mSoundSystem.PlaySound(sound: "Button-0000")
+                mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
                 removeAllChildren()
                 
                 ResetGameOverScreen()
@@ -133,7 +133,7 @@ class GameOver: SKScene {
             }
             else if touchedNode.name == "Return To Main Menu"
             {
-                mSoundSystem.PlaySound(sound: "Button-0000")
+                mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
                 removeAllChildren()
                 
                 ResetGameOverScreen()

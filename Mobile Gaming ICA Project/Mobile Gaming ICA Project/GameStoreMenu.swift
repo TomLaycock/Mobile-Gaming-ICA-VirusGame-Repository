@@ -204,12 +204,12 @@ class GameStoreMenu
     {
         if NodeName == "Store Button"
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mGameScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mGameScene)
             ToggleStoreMenu(to: true)
         }
         else if NodeName == "Close Store Button"
         {
-            mGameScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mGameScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mGameScene)
             ToggleStoreMenu(to: false)
         }
         
@@ -218,39 +218,39 @@ class GameStoreMenu
         {
             if mGameScene.mScore >= 1
             {
-                mGameScene.mSoundSystem.PlaySoundOverlap(sound: "Coin")
+                mGameScene.mSoundSystem.PlaySound(sound: "Coin", scene: mGameScene)
                 mGameScene.mScore = mGameScene.mScore - 1
                 mProjectileOneQuantity = mProjectileOneQuantity + 1
             }
             else
             {
-                mGameScene.mSoundSystem.PlaySound(sound: "SmallClick")
+                mGameScene.mSoundSystem.PlaySound(sound: "Small Click", scene: mGameScene)
             }
         }
         else if NodeName == "Projectile Two Buy Button"
         {
             if mGameScene.mScore >= 5
             {
-                mGameScene.mSoundSystem.PlaySoundOverlap(sound: "Coin")
+                mGameScene.mSoundSystem.PlaySound(sound: "Coin", scene: mGameScene)
                 mGameScene.mScore = mGameScene.mScore - 5
                 mProjectileTwoQuantity = mProjectileTwoQuantity + 1
             }
             else
             {
-                mGameScene.mSoundSystem.PlaySound(sound: "SmallClick")
+                mGameScene.mSoundSystem.PlaySound(sound: "Small Click", scene: mGameScene)
             }
         }
         else if NodeName == "Projectile Three Buy Button"
         {
             if mGameScene.mScore >= 10
             {
-                mGameScene.mSoundSystem.PlaySoundOverlap(sound: "Coin")
+                mGameScene.mSoundSystem.PlaySound(sound: "Coin", scene: mGameScene)
                 mGameScene.mScore = mGameScene.mScore - 10
                 mProjectileThreeQuantity = mProjectileThreeQuantity + 1
             }
             else
             {
-                mGameScene.mSoundSystem.PlaySound(sound: "SmallClick")
+                mGameScene.mSoundSystem.PlaySound(sound: "Small Click", scene: mGameScene)
             }
         }
     }

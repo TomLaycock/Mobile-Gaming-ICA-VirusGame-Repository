@@ -160,13 +160,13 @@ class MainOptionsMenu
     {
         if NodeName == "Close Options Menu Button"
         {
-            mMenuScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mMenuScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mMenuScene)
             mMenuScene.mOptionsMenuActive = false
             ToggleOptionsMenu(to: false)
         }
         else if NodeName == "Audio On Button"
         {
-            mMenuScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mMenuScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mMenuScene)
             mAudioValue = true
             mAudioToggleButtonOn.SetButtonState(value: false)
             mAudioToggleButtonOff.SetButtonState(value: true)
@@ -175,7 +175,7 @@ class MainOptionsMenu
         }
         else if NodeName == "Audio Off Button"
         {
-            mMenuScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mMenuScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mMenuScene)
             mAudioValue = false
             mAudioToggleButtonOn.SetButtonState(value: true)
             mAudioToggleButtonOff.SetButtonState(value: false)
@@ -184,7 +184,7 @@ class MainOptionsMenu
         }
         else if NodeName == "Alt On Button"
         {
-            mMenuScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mMenuScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mMenuScene)
             mAlternateControlsValue = true
             mAlternateControlsButtonOn.SetButtonState(value: false)
             mAlternateControlsButtonOff.SetButtonState(value: true)
@@ -193,7 +193,7 @@ class MainOptionsMenu
         }
         else if NodeName == "Alt Off Button"
         {
-            mMenuScene.mSoundSystem.PlaySound(sound: "Button-0000")
+            mMenuScene.mSoundSystem.PlaySound(sound: "Button Zero", scene: mMenuScene)
             mAlternateControlsValue = false
             mAlternateControlsButtonOn.SetButtonState(value: true)
             mAlternateControlsButtonOff.SetButtonState(value: false)

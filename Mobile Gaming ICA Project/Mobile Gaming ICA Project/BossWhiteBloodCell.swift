@@ -13,10 +13,10 @@ import AVFoundation
 class BossWhiteBloodCell : WhiteBloodCell
 {
 
-    let mBossHealthBar = NumberBar(Start: 50, Max: 50, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/GreenSquare", Lentgh: 100, Height: 17)
+    let mBossHealthBar = NumberBar(Start: 150, Max: 150, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/GreenSquare", Lentgh: 120, Height: 20)
 
-    var mBossMaxHealth = CGFloat(50)
-    var mBossHealth = CGFloat(50)
+    var mBossMaxHealth = CGFloat(150)
+    var mBossHealth = CGFloat(150)
     {
         didSet
         {
@@ -29,16 +29,29 @@ class BossWhiteBloodCell : WhiteBloodCell
         super.mAlive = false
     }
     
+    override func CheckCollisionWithPlayer(player Player: Player)
+    {
+        if Vector2.magnitude(v: Vector2(CGPoint: Player.GetPosition()) - Vector2(CGPoint: self.GetPosition())) < Player.mCellBackground.size.width / 2
+        {
+            Player.DecreaseHealth(by: CGFloat(50))
+            mGameScene.mSoundSystem.PlaySound(sound: "Hit", scene: mGameScene)
+            if Player.GetHealth() > 0
+            {
+                self.SetPosition(to: CGPoint(x: mGameScene.frame.midX, y: mGameScene.frame.maxY + (self.mCellBackground.size.height / 2)))
+            }
+        }
+    }
+    
     func InitialiseBossWhiteBloodCell(scene Scene: GameScene, name Name: String, zposition ZPosition: CGFloat)
     {
-        mBossMaxHealth = 50
+        mBossMaxHealth = 150
         mBossHealth = mBossMaxHealth
         
         super.mAlive = false
         InitialiseWhiteBloodCell(scene: Scene, name: Name, zposition: ZPosition)
         
         mBossHealthBar.SetBarPosition(to: super.GetPosition())
-        mBossHealthBar.SetBarZPosition(to: 90)
+        mBossHealthBar.SetBarZPosition(to: 50)
         
         Scene.addChild(mBossHealthBar.GetBarBackground())
         Scene.addChild(mBossHealthBar.GetBarForeground())
@@ -48,13 +61,23 @@ class BossWhiteBloodCell : WhiteBloodCell
     func UpdateHealthBarPosition()
     {
         let SpriteHeight = super.mCellBackground.size.height
-        mBossHealthBar.SetBarPosition(to: super.GetPosition() + CGPoint(x: 0, y: (SpriteHeight / 2)))
+        mBossHealthBar.SetBarPosition(to: super.GetPosition() + CGPoint(x: -(mBossHealthBar.GetBarBackground().size.width / 2), y: (SpriteHeight / 2)))
+    }
+    
+    func CheckHealth()
+    {
+        if self.GetHealth() <= 0
+        {
+            self.mAlive = false
+            super.DestroyWhiteBloodCell(playSound: true)
+        }
     }
     
     override func Update(rotationSpeed Speed: Float)
     {
         RotateBackground(rotationSpeed: Speed)
         UpdateHealthBarPosition()
+        CheckHealth()
     }
     
 }

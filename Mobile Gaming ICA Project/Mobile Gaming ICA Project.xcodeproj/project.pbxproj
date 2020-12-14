@@ -38,6 +38,7 @@
 		E26360D82580527600D948EA /* BossWhiteBloodCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26360D72580527600D948EA /* BossWhiteBloodCell.swift */; };
 		E2787E1E257ED598008E95C3 /* Projectile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2787E1D257ED598008E95C3 /* Projectile.swift */; };
 		E2787E20257EE719008E95C3 /* MainMenuVirus.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2787E1F257EE719008E95C3 /* MainMenuVirus.swift */; };
+		E2970A7D25868B0600926130 /* InfoMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2970A7C25868B0600926130 /* InfoMenu.swift */; };
 		E2A2E28C2582B6C8002BF237 /* GameOver.sks in Resources */ = {isa = PBXBuildFile; fileRef = E2A2E28B2582B6C8002BF237 /* GameOver.sks */; };
 		E2A2E28E2582B708002BF237 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A2E28D2582B708002BF237 /* GameViewController.swift */; };
 		E2A2E2902582B730002BF237 /* GameOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A2E28F2582B730002BF237 /* GameOver.swift */; };
@@ -101,6 +102,7 @@
 		E26360D72580527600D948EA /* BossWhiteBloodCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BossWhiteBloodCell.swift; sourceTree = "<group>"; };
 		E2787E1D257ED598008E95C3 /* Projectile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Projectile.swift; sourceTree = "<group>"; };
 		E2787E1F257EE719008E95C3 /* MainMenuVirus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuVirus.swift; sourceTree = "<group>"; };
+		E2970A7C25868B0600926130 /* InfoMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoMenu.swift; sourceTree = "<group>"; };
 		E2A2E28B2582B6C8002BF237 /* GameOver.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOver.sks; sourceTree = "<group>"; };
 		E2A2E28D2582B708002BF237 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		E2A2E28F2582B730002BF237 /* GameOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOver.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				E210E80B2577F83F008CF32B /* GameScene.swift */,
 				E2A2E28B2582B6C8002BF237 /* GameOver.sks */,
 				E2A2E28F2582B730002BF237 /* GameOver.swift */,
+				E2970A7C25868B0600926130 /* InfoMenu.swift */,
 				E210E8102577F840008CF32B /* PoolSystem.swift */,
 				E2AF4FD8257D72D000FE6430 /* CustomSoundSystem.swift */,
 				E2AF4FD4257D4E0000FE6430 /* MainOptionsMenu.swift */,
@@ -386,6 +389,7 @@
 				E2A2E28E2582B708002BF237 /* GameViewController.swift in Sources */,
 				E210E7C42577F689008CF32B /* AppDelegate.swift in Sources */,
 				E210E8192577F840008CF32B /* Player.swift in Sources */,
+				E2970A7D25868B0600926130 /* InfoMenu.swift in Sources */,
 				E210E8072577F7FE008CF32B /* MainMenu.swift in Sources */,
 				E210E8142577F840008CF32B /* Cell.swift in Sources */,
 				E210E81F2577F840008CF32B /* WhiteBloodCell.swift in Sources */,

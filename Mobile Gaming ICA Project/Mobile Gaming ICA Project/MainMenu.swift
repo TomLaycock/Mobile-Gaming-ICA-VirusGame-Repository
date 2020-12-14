@@ -22,6 +22,7 @@ class MainMenu: SKScene {
     let mButtons = ["PlayButton-TB", "OptionsButton-TB"]
     
     let mOptionsMenu = MainOptionsMenu()
+    let mInfoMenu = InfoMenu()
     let mSoundSystem = CustomSoundSystem()
     
     var mSceneLoadingComplete = false
@@ -42,6 +43,7 @@ class MainMenu: SKScene {
         {
             mOptionsMenu.SetupGameOptionsMenu(scene: self, audioOn: defaults.bool(forKey: "AudioToggleValue"), altOn: defaults.bool(forKey: "AltToggleValue"))
             mSoundSystem.SetupCustomSoundSystem()
+            mInfoMenu.SetupInfoMenu(scene: self)
             
             for i in 1...8
             {
@@ -65,6 +67,7 @@ class MainMenu: SKScene {
         }
         
         mOptionsMenu.InitialiseOptionsMenu()
+        mInfoMenu.InitialiseInfoMenu()
         
         print("Loading Main Menu")
         
@@ -111,29 +114,32 @@ class MainMenu: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
-            if !mOptionsMenuActive
+            if !mOptionsMenuActive && !mInfoMenu.mInfoMenuActive
             {
                 if touchedNode.name == mButtons[0]
                 {
                     removeAllChildren()
                     
-                    mSoundSystem.PlaySound(sound: "Button-0000")
+                    mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
                     mGameScene.scaleMode = .resizeFill
                     view?.presentScene(mGameScene, transition: .fade(withDuration: 0.5))
                 }
                 if touchedNode.name == mButtons[1]
                 {
-                    mSoundSystem.PlaySound(sound: "Button-0000")
+                    mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
                     mOptionsMenuActive = true
                     mOptionsMenu.ToggleOptionsMenu(to: true)
                 }
             }
 
+            let NodePressedName = String(touchedNode.name ?? "None")
+            
             if mOptionsMenuActive
             {
-                let NodePressedName = String(touchedNode.name ?? "None")
                 mOptionsMenu.UpdateOptionsMenu(pressed: NodePressedName)
             }
+            
+            mInfoMenu.UpdateInfoMenu(pressed: NodePressedName)
         }
     }
     

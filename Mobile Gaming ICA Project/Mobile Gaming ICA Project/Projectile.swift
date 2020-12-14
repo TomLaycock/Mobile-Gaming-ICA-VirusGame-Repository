@@ -80,13 +80,26 @@ class Projectile : SKSpriteNode {
             
             if Vector2.magnitude(v: Vector2(CGPoint: cell.GetPosition()) - Vector2(CGPoint: self.position)) < cell.mCellBackground.size.width / 2
             {
-                mGameScene.mSoundSystem.PlaySoundOverlap(sound: "Hit")
+                mGameScene.mSoundSystem.PlaySound(sound: "Hit", scene: mGameScene)
                 self.mGameScene.mScore = self.mGameScene.mScore + 5
                 self.DeactivateProjectile()
                 
                 mGameScene.mPlayer.IncreaseEnergy(by: CGFloat(5))
                 cell.DestroyWhiteBloodCell(playSound: true)
             }
+        }
+    }
+    
+    func CheckCollisionWithBoss(cell Cell: BossWhiteBloodCell)
+    {
+        if !Cell.GetAlive() { return }
+        if Vector2.magnitude(v: Vector2(CGPoint: Cell.GetPosition()) - Vector2(CGPoint: self.position)) < Cell.mCellBackground.size.width / 2
+        {
+            mGameScene.mSoundSystem.PlaySound(sound: "Hit", scene: mGameScene)
+            self.DeactivateProjectile()
+            
+            mGameScene.mPlayer.IncreaseEnergy(by: CGFloat(1))
+            Cell.DecreaseHealth(by: CGFloat(self.mDamage))
         }
     }
     

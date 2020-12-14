@@ -6,33 +6,47 @@ import CoreMotion
 class GameScene: SKScene
 {
  
-    //Game Values
+    //System Values
     var mMainMenuScene : MainMenu!
     var mGameOverScene : GameOver!
     let mPoolSystem = PoolSystem()
     
+    let mSoundSystem = CustomSoundSystem()
+    
+    let mMotionManager = CMMotionManager()
+    
+    //Game Values
+    var mGameStarted = false
+    var mGamePaused = false
+    var mStoreOpen = false
+    var mGameOptionsMenu = false
+    
+    var mGameSetupComplete = false
+    
     var mDeltaTime = Double(0)
     var mPrevTime = Double(0)
     
+    //Touch Values
     var mHoldingTouch = false
     var mPurchaseTimer = CGFloat(0)
     var mPurchaseTimerTime = CGFloat(0.2)
     
     var mSwipeResetTimer = CGFloat(0)
     var mSwipeResetTimerTime = CGFloat(0.5)
-    
-    let mMotionManager = CMMotionManager()
 
-    var mPlayer : Player!
-    
     var mTouchPointOne = CGPoint(x: -1000, y: -1000)
     var mTouchPointTwo = CGPoint(x: -1000, y: -1000)
+    
+    //Player Values
+    var mPlayer : Player!
     
     //Game UI
     let mOptionsMenu = OptionsMenu()
     let mStoreMenu = GameStoreMenu()
     
-    let mSoundSystem = CustomSoundSystem()
+    let mTouchInstruction = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
+    let mTouchToStartBackground = SKSpriteNode(imageNamed: "Assets/Squares/BlackSquare.jpg")
+    let mTouchToStart = Button(imageNamed: "Assets/MenuButtons/PlayButton-TB")
     
     let mScoreLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
     var mScore = 0
@@ -50,7 +64,6 @@ class GameScene: SKScene
     let mEnergyBar = NumberBar(Start: 0, Max: 100, BackPath: "Assets/Squares/BlackSquare.jpg", ForePath: "Assets/Squares/blueSquare", Lentgh: 200, Height: 35)
     
     var mSelectedProjectile = 0
-    var mNumberOfWhiteBloodCellsKilled = 0
     
     let mProjectileOneSelectionButton = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0000")
     let mProjectileTwoSelectionButton = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0001")
@@ -60,9 +73,32 @@ class GameScene: SKScene
     let mProjectileTwoQuantityLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
     let mProjectileThreeQuantityLabel = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
     
+    
+    let mSelectedProjectileImage = SKSpriteNode(imageNamed: "Assets/Projectiles/Projectile-0000")
+    let mSelectedProjectileText = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
+    
     //Alternate Controlls
-    let mShakeControl = SKSpriteNode(imageNamed: "Assets/OtherInput/ShakeInput")
-    let mDirectionInputImageSource = "Assets/PtherInput/DirectionInputs"
+    let mShakeControl = Button(imageNamed: "Assets/OtherInput/ShakeInput")
+    let mDirectionNames = [
+        "Alt Down Button",
+        "Alt Left Down Button",
+        "Alt Left Button",
+        "Alt Left Up Button",
+        "Alt Up Button",
+        "Alt Right Up Button",
+        "Alt Right Button",
+        "Alt Right Down Button"
+    ]
+    let mDirectionArray = [
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs"),
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs"),
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs"),
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs"),
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs"),
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs"),
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs"),
+        Button(imageNamed: "Assets/OtherInput/DirectionInputs")
+    ]
     
     //Pause Menu
     let mPauseButtonName = "PauseButton-TB"
@@ -76,18 +112,50 @@ class GameScene: SKScene
     let mReturnToMainMenuButton = Button(imageNamed: "Assets/MenuButtons/" + "ExitButton-TB")
     
     let mPauseBackground = SKSpriteNode(imageNamed: "Assets/Squares/BlackSquare.jpg")
+
+    //Round System
+    let mRoundText = SKLabelNode(fontNamed: "HelveticaNeue-Thin")
     
-    var mGamePaused = false
-    var mStoreOpen = false
-    var mGameOptionsMenu = false
+    var mRoundTimeRemaining = 30
+    var mRoundTimer = Float(0)
+    var mRoundNumber = 0
+    {
+        didSet
+        {
+            SetRoundInformation()
+        }
+    }
+    var mNumberOfVirusesToSpawnPerRound = 3
+    var mNumberOfCellsSpawned = 0
+    {
+        didSet
+        {
+            SetRoundInformation()
+        }
+    }
+    var mNumberOfWhiteBloodCellsKilled = 0
+    {
+        didSet
+        {
+            SetRoundInformation()
+        }
+    }
+    var mVirusSpawnTimer = Float(0)
+    var mVirusSpawnTimeToMeet = Float(1)
+    var mBossSpawned = false
+    let mBossRoundNumber = 4
     
-    var mGameSetupComplete = false
+    let mBossWhiteBloodCell = BossWhiteBloodCell(back: "Assets/Viruses/WhiteBloodCell-0001-SpikesOnly", front: "Assets/Viruses/WhiteBloodCell-0001-BodyOnly", speed: 120, id: 1000)
+    
+    //Game Over Values
+    var mGameOver = false
+    var mGameOverTimer = Float(0)
     
     //User Save Values
     let defaults = UserDefaults.standard
     
     override func didMove(to view: SKView) {
-
+        
         //Initialising Pool System
         if !mGameSetupComplete
         {
@@ -100,7 +168,7 @@ class GameScene: SKScene
             print("Re Initialising Pool System")
         }
 
-        for _ in 1...10
+        /*for _ in 1...10
         {
             let EnergyToSpawn = mPoolSystem.GetNextAvailableEnergyBall()
             EnergyToSpawn.Spawn(with: Int.random(in: 1...5), otherCells: mPoolSystem.GetEnergyBalls())
@@ -111,7 +179,7 @@ class GameScene: SKScene
             let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
             WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: 100, height: 100), otherCells: mPoolSystem.GetWhiteBloodCells())
             WhiteBloodCell.SetSpeed(to: Float(Int.random(in: 60...100)))
-        }
+        }*/
         
         print("Pool System Object Requests Complete")
         
@@ -132,9 +200,34 @@ class GameScene: SKScene
             mPlayer = Player(back: "Assets/Viruses/Virus-0000-SpikesOnly", front: "Assets/Viruses/Virus-0000-BodyOnly", speed: 2)
         }
         
+        mBossSpawned = false
+        
         mPlayer.InitialisePlayer(scene: self, name: "Player", zposition: 8)
         mPlayer.SpawnPlayer(position: CGPoint(x: frame.midX, y: frame.midY), size: CGSize(width: 100, height: 100))
         mPlayer.SetSpeed(to: 200)
+        
+        //Touch to start
+        mTouchToStartBackground.position = CGPoint(x: frame.midX, y: frame.midY)
+        mTouchToStartBackground.size = CGSize(width: frame.maxX, height: frame.maxY)
+        mTouchToStartBackground.zPosition = 200
+        mTouchToStartBackground.alpha = 0.8
+        addChild(mTouchToStartBackground)
+        
+        mTouchInstruction.fontSize = 72
+        mTouchInstruction.position = CGPoint(x: frame.midX, y: frame.maxY - 150)
+        mTouchInstruction.text = "Touch Button to Start!"
+        mTouchInstruction.zPosition = 201
+        mTouchInstruction.horizontalAlignmentMode = .center
+        mTouchInstruction.isUserInteractionEnabled = false
+        addChild(mTouchInstruction)
+        
+        mTouchToStart.name = "Touch To Start"
+        mTouchToStart.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
+        mTouchToStart.position = CGPoint(x: frame.midX, y: frame.midY)
+        mTouchToStart.SetButtonPosition(to: mTouchToStart.position)
+        mTouchToStart.SetButtonState(value: true)
+        mTouchToStart.zPosition = 201
+        addChild(mTouchToStart)
         
         //Creating MainMenu Buttons
         mPauseMenuTitle.name = "MenuTitle"
@@ -243,28 +336,79 @@ class GameScene: SKScene
         mProjectileThreeQuantityLabel.isUserInteractionEnabled = false
         addChild(mProjectileThreeQuantityLabel)
         
+        
+        mSelectedProjectileImage.position = CGPoint(x: frame.maxX - ProjectileButtonsSize, y: frame.maxY - (ProjectileButtonsSize * 2))
+        mSelectedProjectileImage.zPosition = 90
+        mSelectedProjectileImage.size = CGSize(width: ProjectileButtonsSize, height: ProjectileButtonsSize)
+        mSelectedProjectileImage.name = "SelectedProjectileImage"
+        addChild(mSelectedProjectileImage)
+        
+        mSelectedProjectileText.fontSize = 17
+        mSelectedProjectileText.position = CGPoint(x: frame.maxX - (ProjectileButtonsSize * 2), y: frame.maxY - (ProjectileButtonsSize * 2))
+        mSelectedProjectileText.text = "SELECTED PROJECTILE:"
+        mSelectedProjectileText.zPosition = 91
+        mSelectedProjectileText.horizontalAlignmentMode = .right
+        mSelectedProjectileText.verticalAlignmentMode = .center
+        mSelectedProjectileText.isUserInteractionEnabled = false
+        addChild(mSelectedProjectileText)
+        
+        //Alternate Controls
+        mShakeControl.position = CGPoint(x: 0 + 50, y: frame.midY)
+        mShakeControl.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        mShakeControl.zPosition = 91
+        mShakeControl.size = CGSize(width: 100, height: 100)
+        mShakeControl.name = "Alt Shake Button"
+        mShakeControl.isHidden = true
+        addChild(mShakeControl)
+        
+        var DirectionCounter = 0
+        for direction in mDirectionArray
+        {
+            direction.anchorPoint = CGPoint(x: 0.5, y: 2)
+            direction.position = CGPoint(x: frame.maxX - 100, y: frame.midY)
+            direction.zPosition = 91
+            direction.zRotation = CGFloat(GLKMathDegreesToRadians(Float(45 * DirectionCounter)))
+            direction.size = CGSize(width: 60, height: 40)
+            direction.name = mDirectionNames[DirectionCounter]
+            direction.isHidden = true
+            addChild(direction)
+            
+            DirectionCounter = DirectionCounter + 1
+        }
+        
+        //Round UI
+        mRoundText.fontSize = 30
+        mRoundText.position = CGPoint(x: frame.midX - 50, y: frame.maxY - 50)
+        mRoundText.zPosition = 91
+        mRoundText.horizontalAlignmentMode = .center
+        addChild(mRoundText)
+
+        mRoundTimeRemaining = 30
+        mRoundNumber = 0
+        
+        mNumberOfCellsSpawned = 0
+        
+        mBossWhiteBloodCell.InitialiseBossWhiteBloodCell(scene: self, name: "Boss White Blood Cell", zposition: 7)
+        
         print("UI Setup Complete")
         
         mMotionManager.startAccelerometerUpdates()
         mMotionManager.startGyroUpdates()
         
+        ToggleAlternateControlView(to: mOptionsMenu.mAlternateControlsValue)
+        
         mGameSetupComplete = true
-        
-        
-        /*let swipeRight : UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.Swipe))
-        swipeRight.direction = .right
-
-        view.addGestureRecognizer(swipeRight)*/
-        
     }
     
-    /*@objc func Swipe(sender: UISwipeGestureRecognizer) {
-
-        print(sender.location(in: view))
-        //print(sender.location(ofTouch: , in: view))
-        print("Object has been swiped")
-
-    }*/
+    func ToggleAlternateControlView(to Value: Bool)
+    {
+        mShakeControl.isHidden = !Value
+        
+        for direction in mDirectionArray
+        {
+            direction.isHidden = !Value
+        }
+    }
 
     func GetNextProjectile() -> Projectile
     {
@@ -288,6 +432,18 @@ class GameScene: SKScene
         return mPoolSystem.GetNextAvailableProjectileOne()
     }
     
+    func MathMax(a A: Int, b B: Int) -> Int
+    {
+        if A > B
+        {
+            return A
+        }
+        else
+        {
+            return B
+        }
+    }
+    
     func SwipePerformed() -> Bool
     {
         
@@ -308,11 +464,11 @@ class GameScene: SKScene
             mStoreMenu.mProjectileThreeQuantity > 0 && mSelectedProjectile == 2
         {
             
-            mSoundSystem.PlaySoundOverlap(sound: "Projectile Shot")
+            mSoundSystem.PlaySound(sound: "Projectile Shoot", scene: self)
             
             let LaunchDirection = Vector2.normalise(v: Vector2(CGPoint: mTouchPointTwo) - Vector2(CGPoint: mTouchPointOne))
             let projectileToLaunch = GetNextProjectile()
-            projectileToLaunch.Spawn(at: mPlayer.GetPosition(), dir: LaunchDirection, with: mSelectedProjectile + 1, speed: 450)
+            projectileToLaunch.Spawn(at: mPlayer.GetPosition(), dir: LaunchDirection, with: (mSelectedProjectile * 4) + MathMax(a: 1, b: mSelectedProjectile * 1), speed: 450)
             
             mTouchPointOne = CGPoint(x: -1000, y: -1000)
             mTouchPointTwo = CGPoint(x: -1000, y: -1000)
@@ -322,7 +478,7 @@ class GameScene: SKScene
         }
         else //Plays Small Click sound to signify no ammo
         {
-            mSoundSystem.PlaySound(sound: "SmallClick")
+            mSoundSystem.PlaySound(sound: "Small Click", scene: self)
         }
         
         mTouchPointOne = CGPoint(x: -1000, y: -1000)
@@ -361,6 +517,19 @@ class GameScene: SKScene
             
             mHoldingTouch = false;
             
+            if !mGameStarted
+            {
+                if touchedNode.name == "Touch To Start"
+                {
+                    mTouchToStart.SetButtonState(value: false)
+                    mTouchToStartBackground.size = CGSize(width: 0, height: 0)
+                    mTouchToStartBackground.isHidden = true
+                    mTouchInstruction.isHidden = true
+                    mGameStarted = true
+                }
+                return
+            }
+            
             if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
             {
                 mTouchPointTwo = location
@@ -379,12 +548,12 @@ class GameScene: SKScene
             if touchedNode.name == mPauseButtonName && !mStoreOpen
             {
                 TogglePauseMenu()
-                mSoundSystem.PlaySound(sound: "Button-0000")
+                mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
             }
             else if touchedNode.name == mButtons[0] //Resume Game
             {
                 TogglePauseMenu()
-                mSoundSystem.PlaySound(sound: "Button-0000")
+                mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
             }
             else if touchedNode.name == mButtons[1] //Options Menu
             {
@@ -394,11 +563,11 @@ class GameScene: SKScene
                 mPauseButton.SetButtonState(value: false)
                 mStoreMenu.mStoreButton.SetButtonState(value: false)
                 
-                mSoundSystem.PlaySound(sound: "Button-0000")
+                mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
             }
             else if touchedNode.name == mButtons[2] //Return to main menu
             {
-                mSoundSystem.PlaySound(sound: "Button-0000")
+                mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
                 
                 ResetGameScene()
                 removeAllChildren()
@@ -408,20 +577,26 @@ class GameScene: SKScene
             }
             
             //Projectiles
-            if touchedNode.name == "ProjectileButtonOne"
+            if !mGamePaused && !mGameOptionsMenu && !mStoreOpen
             {
-                mSoundSystem.PlaySound(sound: "ProjectileSelect")
-                mSelectedProjectile = 0
-            }
-            else if touchedNode.name == "ProjectileButtonTwo"
-            {
-                mSoundSystem.PlaySound(sound: "ProjectileSelect")
-                mSelectedProjectile = 1
-            }
-            else if touchedNode.name == "ProjectileButtonThree"
-            {
-                mSoundSystem.PlaySound(sound: "ProjectileSelect")
-                mSelectedProjectile = 2
+                if touchedNode.name == "ProjectileButtonOne"
+                {
+                    mSoundSystem.PlaySound(sound: "Projectile Select", scene: self)
+                    mSelectedProjectile = 0
+                    mSelectedProjectileImage.texture = SKTexture(imageNamed: "Assets/Projectiles/Projectile-0000")
+                }
+                else if touchedNode.name == "ProjectileButtonTwo"
+                {
+                    mSoundSystem.PlaySound(sound: "Projectile Select", scene: self)
+                    mSelectedProjectile = 1
+                    mSelectedProjectileImage.texture = SKTexture(imageNamed: "Assets/Projectiles/Projectile-0001")
+                }
+                else if touchedNode.name == "ProjectileButtonThree"
+                {
+                    mSoundSystem.PlaySound(sound: "Projectile Select", scene: self)
+                    mSelectedProjectile = 2
+                    mSelectedProjectileImage.texture = SKTexture(imageNamed: "Assets/Projectiles/Projectile-0002")
+                }
             }
             
             if !mGamePaused
@@ -440,7 +615,77 @@ class GameScene: SKScene
             //If player has chosen to use touch controls instead
             if defaults.bool(forKey: "AltToggleValue")
             {
+                if touchedNode.name == "Alt Shake Button"
+                {
+                    self.ShakeDevice()
+                }
+                else if touchedNode.name == "Alt Down Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: 0, y: -1)))
+                    }
+                }
+                else if touchedNode.name == "Alt Left Down Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: 1, y: -1)))
+                    }
+                }
+                else if touchedNode.name == "Alt Left Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: 1, y: 0)))
+                    }
+                }
+                else if touchedNode.name == "Alt Left Up Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: 1, y: 1)))
+                    }
+                }
+                else if touchedNode.name == "Alt Up Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: 0, y: 1)))
+                    }
+                }
+                else if touchedNode.name == "Alt Right Up Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: -1, y: 1)))
+                    }
+                }
+                else if touchedNode.name == "Alt Right Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: -1, y: 0)))
+                    }
+                }
+                else if touchedNode.name == "Alt Right Down Button"
+                {
+                    if mPlayer.GetAlive() && !mGameOver && mGameStarted
+                    {
+                        mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: -1, y: -1)))
+                    }
+                }
                 
+                /*
+                 "Alt Down Button",
+                 "Alt Left Down Button",
+                 "Alt Left Button",
+                 "Alt Left Up Button",
+                 "Alt Up Button",
+                 "Alt Right Up Button",
+                 "Alt Right Button",
+                 "Alt Right Down Button"
+                 */
             }
         }
     }
@@ -456,26 +701,70 @@ class GameScene: SKScene
     override func update(_ currentTime: TimeInterval)
     {
         
-        if mPlayer.mHealth <= 0
+        if mGameOver
         {
-            mGameOverScene.ToggleGameOverScreenWin(value: false, score: mScore)
+            mGameOverTimer = mGameOverTimer + Float(mDeltaTime)
             
-            ResetGameScene()
-            removeAllChildren()
+            if mGameOverTimer >= 1
+            {
+                //Player Lost
+                if mPlayer.mHealth <= 0
+                {
+                    mGameOverScene.ToggleGameOverScreenWin(value: false, score: mScore)
+                    
+                    ResetGameScene()
+                    removeAllChildren()
 
-            mGameOverScene.scaleMode = .resizeFill
-            view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
+                    mGameOverScene.scaleMode = .resizeFill
+                    view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
+                }
+                
+                //Player Won
+                if mRoundNumber == mBossRoundNumber && !mBossWhiteBloodCell.GetAlive() && mBossWhiteBloodCell.GetHealth() <= 0
+                {
+                    mGameOverScene.ToggleGameOverScreenWin(value: true, score: mScore)
+                    
+                    ResetGameScene()
+                    removeAllChildren()
+
+                    mGameOverScene.scaleMode = .resizeFill
+                    view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
+                }
+            }
+            
+            return
         }
         
-        if mNumberOfWhiteBloodCellsKilled >= 20
+        if mPlayer.mHealth <= 0
         {
-            mGameOverScene.ToggleGameOverScreenWin(value: true, score: mScore)
+            mPlayer.DestroyPlayer()
             
-            ResetGameScene()
-            removeAllChildren()
+            mSoundSystem.PlaySound(sound: "Cell Death", scene: self)
+            
+            if let mShakeParticle = SKEmitterNode(fileNamed: "ShakeEffect")
+            {
+                mShakeParticle.position = CGPoint(x: frame.midX, y: frame.midY)
+                addChild(mShakeParticle)
 
-            mGameOverScene.scaleMode = .resizeFill
-            view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
+                let removeAfterDead = SKAction.sequence([SKAction.wait(forDuration: 1), SKAction.removeFromParent()])
+                mShakeParticle.run(removeAfterDead)
+            }
+            
+            mGameOver = true
+        }
+        
+        if mRoundNumber == mBossRoundNumber && !mBossWhiteBloodCell.GetAlive() && mBossWhiteBloodCell.GetHealth() <= 0
+        {
+            if let mShakeParticle = SKEmitterNode(fileNamed: "ShakeEffect")
+            {
+                mShakeParticle.position = CGPoint(x: frame.midX, y: frame.midY)
+                addChild(mShakeParticle)
+
+                let removeAfterDead = SKAction.sequence([SKAction.wait(forDuration: 1), SKAction.removeFromParent()])
+                mShakeParticle.run(removeAfterDead)
+            }
+            
+            mGameOver = true
         }
         
         if(mDeltaTime == 0)
@@ -490,6 +779,11 @@ class GameScene: SKScene
         }
         
         //print(String(currentTime) + "    " + String(mPrevTime) + "     " + String(mDeltaTime))
+        
+        if !mGameStarted
+        {
+            return
+        }
         
         if mStoreOpen && !mGamePaused
         {
@@ -523,12 +817,56 @@ class GameScene: SKScene
         if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
         {
             
-            var playerRotVector = Vector2(x: 0, y: 0)
-            var playerAccVector = Vector2(x: 0, y: 0)
+            //Round System Management
+            if mRoundNumber < mBossRoundNumber
+            {
+                if mRoundTimeRemaining <= 0 || mNumberOfCellsSpawned >= mNumberOfVirusesToSpawnPerRound && mPoolSystem.GetNumberOfWhiteBloodCellsAlive() <= 0
+                {
+                    mRoundNumber = mRoundNumber + 1
+                    mNumberOfVirusesToSpawnPerRound = 3 + (2 * mRoundNumber)
+                    mRoundTimeRemaining = 30
+                    mNumberOfCellsSpawned = 0
+                }
+            }
+
+            mRoundTimer = mRoundTimer + Float(mDeltaTime)
+            if mRoundTimer >= 1
+            {
+                mRoundTimer = 0
+                mRoundTimeRemaining = mRoundTimeRemaining - 1
+            }
+            
+            if (mNumberOfCellsSpawned < mNumberOfVirusesToSpawnPerRound && mRoundNumber < mBossRoundNumber)
+            {
+                mVirusSpawnTimer = mVirusSpawnTimer + Float(mDeltaTime)
+                
+                if mVirusSpawnTimer >= mVirusSpawnTimeToMeet
+                {
+                    mNumberOfCellsSpawned = mNumberOfCellsSpawned + 1
+                    mVirusSpawnTimeToMeet = Float.random(in: 0.5...1.6)
+                    mVirusSpawnTimer = 0
+                    
+                    let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
+                    WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: 100, height: 100), otherCells: mPoolSystem.GetWhiteBloodCells())
+                    WhiteBloodCell.SetSpeed(to: Float(Int.random(in: 60...100)))
+                    
+                    SetRoundInformation()
+                }
+            }
+            
+            if mRoundNumber == mBossRoundNumber && !mBossSpawned
+            {
+                mBossSpawned = true
+                mBossWhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: frame.maxX / 5, height: frame.maxX / 5), otherCells: mPoolSystem.GetWhiteBloodCells())
+            }
             
             //If Device motion Controlls Are Enabled
             if !defaults.bool(forKey: "AltToggleValue")
             {
+                
+                //Player Movement
+                var playerRotVector = Vector2(x: 0, y: 0)
+                var playerAccVector = Vector2(x: 0, y: 0)
             
                 if let gyroscope = mMotionManager.gyroData
                 {
@@ -541,11 +879,15 @@ class GameScene: SKScene
                     playerAccVector = Vector2(x: Float(-accelerometer.acceleration.y), y: Float(accelerometer.acceleration.x))
                 }
                 
+                if mPlayer.GetAlive()
+                {
+                    mPlayer.UpdateMovementDirection(rotation: playerRotVector, acceleration: playerAccVector)
+                }
+                
             }
             
             if mPlayer.GetAlive()
             {
-                mPlayer.UpdateMovementDirection(rotation: playerRotVector, acceleration: playerAccVector)
                 mPlayer.UpdatePlayer(speed: 2)
             }
             
@@ -560,11 +902,11 @@ class GameScene: SKScene
                 }
             }
             
-            if mPoolSystem.GetNumberOfWhiteBloodCellsAlive() < 3
+            if mBossWhiteBloodCell.GetAlive()
             {
-                let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
-                WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: 100, height: 100), otherCells: mPoolSystem.GetWhiteBloodCells())
-                WhiteBloodCell.SetSpeed(to: Float(Int.random(in: 60...100)))
+                mBossWhiteBloodCell.MoveTowards(target: mPlayer.GetPosition())
+                mBossWhiteBloodCell.Update(rotationSpeed: 1)
+                mBossWhiteBloodCell.CheckCollisionWithPlayer(player: mPlayer)
             }
             
             //Update Energy Balls
@@ -592,6 +934,7 @@ class GameScene: SKScene
                 
                 projectile.Update()
                 projectile.CheckCollisionWithWhiteBloodCells(cells: mPoolSystem.GetWhiteBloodCells())
+                projectile.CheckCollisionWithBoss(cell: mBossWhiteBloodCell)
             }
             
             for projectile in mPoolSystem.GetProjectileTwoPool()
@@ -600,6 +943,7 @@ class GameScene: SKScene
                 
                 projectile.Update()
                 projectile.CheckCollisionWithWhiteBloodCells(cells: mPoolSystem.GetWhiteBloodCells())
+                projectile.CheckCollisionWithBoss(cell: mBossWhiteBloodCell)
             }
             
             for projectile in mPoolSystem.GetProjectileThreePool()
@@ -608,6 +952,7 @@ class GameScene: SKScene
                 
                 projectile.Update()
                 projectile.CheckCollisionWithWhiteBloodCells(cells: mPoolSystem.GetWhiteBloodCells())
+                projectile.CheckCollisionWithBoss(cell: mBossWhiteBloodCell)
             }
             
         }
@@ -668,6 +1013,17 @@ class GameScene: SKScene
     
     func ResetGameScene()
     {
+        mGameStarted = false
+        mRoundTimeRemaining = 30
+        mRoundNumber = 0
+        mNumberOfVirusesToSpawnPerRound = 3
+        mNumberOfCellsSpawned = 0
+        
+        mTouchToStart.SetButtonState(value: true)
+        mTouchToStartBackground.size = CGSize(width: frame.maxX, height: frame.maxY)
+        mTouchToStartBackground.isHidden = false
+        mTouchInstruction.isHidden = false
+        
         mPoolSystem.ResetPools()
         
         TogglePauseMenuSpecifc(to: false)
@@ -680,6 +1036,9 @@ class GameScene: SKScene
         mNumberOfWhiteBloodCellsKilled = 0
         
         mScoreLabel.text = "SCORE: 0"
+        
+        mGameOver = false
+        mGameOverTimer = 0
     }
  
     func GetDeltaTime() -> Double
@@ -694,7 +1053,7 @@ class GameScene: SKScene
             
             mPlayer.SetEnergy(to: CGFloat(0))
             
-            mSoundSystem.PlaySound(sound: "PowerUp")
+            mSoundSystem.PlaySound(sound: "Power Up", scene: self)
             
             if let mShakeParticle = SKEmitterNode(fileNamed: "ShakeEffect")
             {
@@ -712,9 +1071,25 @@ class GameScene: SKScene
                     WhiteBloodCellInstance.DestroyWhiteBloodCell(playSound: false)
                 }
             }
+         
+            if mBossWhiteBloodCell.GetAlive() && mBossWhiteBloodCell.GetHealth() > 0
+            {
+                mBossWhiteBloodCell.DecreaseHealth(by: 20)
+            }
             
         }
+        else
+        {
+            mSoundSystem.PlaySound(sound: "Small Click", scene: self)
+        }
         
+    }
+    
+    func SetRoundInformation()
+    {
+        let totalAlive = mPoolSystem.GetNumberOfWhiteBloodCellsAlive()
+        
+        mRoundText.text = "WAVE: " + String(mRoundNumber + 1) + "    CELLS REMAINING: " + String(totalAlive)
     }
     
 }

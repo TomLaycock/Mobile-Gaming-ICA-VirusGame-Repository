@@ -107,6 +107,13 @@ class Player : Cell
     {
         self.mSpeed = Speed
     }
+    
+    func SetPlayerMovementDirection(to Dir: Vector2)
+    {
+        mGameScene.mSoundSystem.PlaySound(sound: "Button One", scene: mGameScene)
+        
+        self.mMovementDirection = Dir
+    }
 
     func UpdateMovementDirection(rotation rotVector: Vector2, acceleration accVector: Vector2)
     {

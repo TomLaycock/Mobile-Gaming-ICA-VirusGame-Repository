@@ -1,0 +1,590 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-Bold;}
+{\colortbl;\red255\green255\blue255;\red109\green122\blue134;\red0\green0\blue0;\red255\green255\blue255;
+\red252\green95\blue162;\red94\green217\blue255;\red66\green162\blue193;\red210\green169\blue255;\red209\green169\blue255;
+\red163\green104\blue231;\red162\green104\blue231;\red252\green106\blue92;\red103\green183\blue164;\red103\green183\blue164;
+\red207\green190\blue104;}
+{\*\expandedcolortbl;;\cssrgb\c49983\c55097\c59678;\cssrgb\c0\c1\c1;\cssrgb\c100000\c100000\c99970\c85000;
+\cssrgb\c100000\c47838\c69603;\cssrgb\c42347\c87929\c100000;\cssrgb\c31013\c69515\c80162;\cssrgb\c85885\c73359\c100000;\cssrgb\c85786\c73513\c100000;
+\cssrgb\c70276\c51096\c92538;\cssrgb\c70188\c51250\c92603;\cssrgb\c99978\c50476\c43559;\cssrgb\c47076\c76133\c70118;\cssrgb\c46922\c76185\c70214;
+\cssrgb\c84928\c78595\c48186;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab593
+\pard\tx593\pardeftab593\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 //\cf4 \cb3 \
+\cf2 \cb3 //  CustomSoundSystem.swift\cf4 \cb3 \
+\cf2 \cb3 //  Mobile Gaming ICA Project\cf4 \cb3 \
+\cf2 \cb3 //\cf4 \cb3 \
+\cf2 \cb3 //  Created by Tom on 06/12/2020.\cf4 \cb3 \
+\cf2 \cb3 //  Copyright \'a9 2020 Tom. All rights reserved.\cf4 \cb3 \
+\cf2 \cb3 //\cf4 \cb3 \
+\
+\cf2 \cb3 /*\cf4 \cb3 \
+\cf2 \cb3  let zombieSound = SKAction.playSoundFileNamed(\cf4 \cb3 \
+\cf2 \cb3  "Sound/Zombie.aif",\cf4 \cb3 \
+\cf2 \cb3  waitForCompletion: false)\cf4 \cb3 \
+\cf2 \cb3  ...\cf4 \cb3 \
+\cf2 \cb3  // Play the coin sound:\cf4 \cb3 \
+\cf2 \cb3  self.runAction(zombieSound)\cf4 \cb3 \
+\cf2 \cb3  */\cf4 \cb3 \
+\
+
+\f1\b \cf5 \cb3 import
+\f0\b0 \cf4 \cb3  SpriteKit\
+
+\f1\b \cf5 \cb3 import
+\f0\b0 \cf4 \cb3  GameplayKit\
+
+\f1\b \cf5 \cb3 import
+\f0\b0 \cf4 \cb3  AVFoundation\
+\
+
+\f1\b \cf5 \cb3 class
+\f0\b0 \cf4 \cb3  \cf6 \cb3 CustomSoundSystem\cf4 \cb3 \
+\{\
+\
+    
+\f1\b \cf5 \cb3 var
+\f0\b0 \cf4 \cb3  \cf7 \cb3 mSoundDict\cf4 \cb3  = \cf8 \cb3 Dictionary\cf4 \cb3 <\cf8 \cb3 String\cf4 \cb3 , \cf9 \cb3 AVAudioPlayer\cf4 \cb3 >()\
+    \
+    
+\f1\b \cf5 \cb3 var
+\f0\b0 \cf4 \cb3  \cf7 \cb3 mProjectileShotPool\cf4 \cb3  : [\cf9 \cb3 AVAudioPlayer\cf4 \cb3 ] = []\
+    
+\f1\b \cf5 \cb3 var
+\f0\b0 \cf4 \cb3  \cf7 \cb3 mCoinSoundPool\cf4 \cb3  : [\cf9 \cb3 AVAudioPlayer\cf4 \cb3 ] = []\
+    
+\f1\b \cf5 \cb3 var
+\f0\b0 \cf4 \cb3  \cf7 \cb3 mHitSoundPool\cf4 \cb3  : [\cf9 \cb3 AVAudioPlayer\cf4 \cb3 ] = []\
+    
+\f1\b \cf5 \cb3 var
+\f0\b0 \cf4 \cb3  \cf7 \cb3 mCellDeathSoundPool\cf4 \cb3  : [\cf9 \cb3 AVAudioPlayer\cf4 \cb3 ] = []\
+    \
+    \cf2 \cb3 //User Save Values\cf4 \cb3 \
+    
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  \cf7 \cb3 defaults\cf4 \cb3  = \cf9 \cb3 UserDefaults\cf4 \cb3 .\cf10 \cb3 standard\cf4 \cb3 \
+    \
+    \cf2 \cb3 //-------------------------------------------------------//\cf4 \cb3 \
+    \cf2 \cb3 //-------------------- System Setup ---------------------//\cf4 \cb3 \
+    \cf2 \cb3 //-------------------------------------------------------//\cf4 \cb3 \
+    \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 SetupCustomSoundSystem\cf4 \cb3 ()\
+    \{\
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  Button0000 = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/ButtonClicks/Button-0000"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            \cf13 \cb3 mSoundDict\cf4 \cb3 [\cf12 \cb3 "Button-0000"\cf4 \cb3 ] = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: Button0000!))\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  Button0001 = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/ButtonClicks/Button-0001"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            \cf13 \cb3 mSoundDict\cf4 \cb3 [\cf12 \cb3 "Button-0001"\cf4 \cb3 ] = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: Button0001!))\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  SmallClick = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/SmallClick"\cf4 \cb3 , ofType: \cf12 \cb3 "mp3"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            \cf13 \cb3 mSoundDict\cf4 \cb3 [\cf12 \cb3 "SmallClick"\cf4 \cb3 ] = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: SmallClick!))\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  ProjectileSelect = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/ProjectileSelect"\cf4 \cb3 , ofType: \cf12 \cb3 "mp3"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            \cf13 \cb3 mSoundDict\cf4 \cb3 [\cf12 \cb3 "ProjectileSelect"\cf4 \cb3 ] = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: ProjectileSelect!))\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  PowerUp = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/PowerUp"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            \cf13 \cb3 mSoundDict\cf4 \cb3 [\cf12 \cb3 "PowerUp"\cf4 \cb3 ] = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: PowerUp!))\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+        \
+        \cf14 \cb3 SetupSoundPools\cf4 \cb3 ()\
+    \}\
+    \
+    \cf2 \cb3 //Setup Sound Pools\cf4 \cb3 \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 SetupSoundPools\cf4 \cb3 ()\
+    \{\
+        \cf2 \cb3 //Projectile Shoot Sound\cf4 \cb3 \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mProjectileShot = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/Shoot"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 _
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf15 \cb3 1\cf11 \cb3 ...\cf15 \cb3 10\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mProjectileShot!))\
+                newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+                \cf13 \cb3 mProjectileShotPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+                \cf11 \cb3 print\cf4 \cb3 (error)\
+            \}\
+        \}\
+        \
+        \cf2 \cb3 //Coin Sound\cf4 \cb3 \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mCoinSound = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/CoinSound"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 _
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf15 \cb3 1\cf11 \cb3 ...\cf15 \cb3 10\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mCoinSound!))\
+                newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+                \cf13 \cb3 mCoinSoundPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+                \cf11 \cb3 print\cf4 \cb3 (error)\
+            \}\
+        \}\
+        \
+        \cf2 \cb3 //Hit Sound\cf4 \cb3 \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mHitSound = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/Hit"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 _
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf15 \cb3 1\cf11 \cb3 ...\cf15 \cb3 10\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mHitSound!))\
+                newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+                \cf13 \cb3 mHitSoundPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+                \cf11 \cb3 print\cf4 \cb3 (error)\
+            \}\
+        \}\
+        \
+        \cf2 \cb3 //Cell Death Sound\cf4 \cb3 \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mCellDeathSound = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/WhiteBloodCellDeath"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 _
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf15 \cb3 1\cf11 \cb3 ...\cf15 \cb3 10\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mCellDeathSound!))\
+                newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+                \cf13 \cb3 mCellDeathSoundPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+                \cf11 \cb3 print\cf4 \cb3 (error)\
+            \}\
+        \}\
+    \}\
+    \
+    \
+    \cf2 \cb3 //------------------------------------------------------------//\cf4 \cb3 \
+    \cf2 \cb3 //-------------------- System Get Sounds ---------------------//\cf4 \cb3 \
+    \cf2 \cb3 //------------------------------------------------------------//\cf4 \cb3 \
+    \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 GetNextAvailableProjectileShotSound\cf4 \cb3 () -> \cf9 \cb3 AVAudioPlayer\cf4 \cb3 \
+    \{\
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  sound 
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mProjectileShotPool\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  \cf11 \cb3 !\cf4 \cb3 sound.\cf10 \cb3 isPlaying\cf4 \cb3  \{ sound.\cf11 \cb3 prepareToPlay\cf4 \cb3 (); 
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  sound \}\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mProjectileShot = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/Shoot"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mProjectileShot!))\
+            newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+            \cf13 \cb3 mProjectileShotPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \
+            
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  newAudioPlayer\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+\
+        \cf11 \cb3 print\cf4 \cb3 (\cf12 \cb3 "Returning Element 0 of Sound System Pool - Failed to create new sound!"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mProjectileShotPool\cf4 \cb3 [\cf15 \cb3 0\cf4 \cb3 ]\
+    \}\
+    \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 GetNextAvailableCoinSound\cf4 \cb3 () -> \cf9 \cb3 AVAudioPlayer\cf4 \cb3 \
+    \{\
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  sound 
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mCoinSoundPool\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  \cf11 \cb3 !\cf4 \cb3 sound.\cf10 \cb3 isPlaying\cf4 \cb3  \{ sound.\cf11 \cb3 prepareToPlay\cf4 \cb3 (); 
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  sound \}\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mCoinSound = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/CoinSound"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mCoinSound!))\
+            newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+            \cf13 \cb3 mCoinSoundPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \
+            
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  newAudioPlayer\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+\
+        \cf11 \cb3 print\cf4 \cb3 (\cf12 \cb3 "Returning Element 0 of Sound System Pool - Failed to create new sound!"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mCoinSoundPool\cf4 \cb3 [\cf15 \cb3 0\cf4 \cb3 ]\
+    \}\
+    \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 GetNextAvailableHitSound\cf4 \cb3 () -> \cf9 \cb3 AVAudioPlayer\cf4 \cb3 \
+    \{\
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  sound 
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mHitSoundPool\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  \cf11 \cb3 !\cf4 \cb3 sound.\cf10 \cb3 isPlaying\cf4 \cb3  \{ sound.\cf11 \cb3 prepareToPlay\cf4 \cb3 (); 
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  sound \}\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mHitSound = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/Hit"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mHitSound!))\
+            newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+            \cf13 \cb3 mHitSoundPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \
+            
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  newAudioPlayer\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+\
+        \cf11 \cb3 print\cf4 \cb3 (\cf12 \cb3 "Returning Element 0 of Sound System Pool - Failed to create new sound!"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mHitSoundPool\cf4 \cb3 [\cf15 \cb3 0\cf4 \cb3 ]\
+    \}\
+    \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 GetNextAvailableDeathSound\cf4 \cb3 () -> \cf9 \cb3 AVAudioPlayer\cf4 \cb3 \
+    \{\
+        
+\f1\b \cf5 \cb3 for
+\f0\b0 \cf4 \cb3  sound 
+\f1\b \cf5 \cb3 in
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mCellDeathSoundPool\cf4 \cb3 \
+        \{\
+            
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  \cf11 \cb3 !\cf4 \cb3 sound.\cf10 \cb3 isPlaying\cf4 \cb3  \{ sound.\cf11 \cb3 prepareToPlay\cf4 \cb3 (); 
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  sound \}\
+        \}\
+        \
+        
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  mDeathSound = \cf9 \cb3 Bundle\cf4 \cb3 .\cf10 \cb3 main\cf4 \cb3 .\cf11 \cb3 path\cf4 \cb3 (forResource: \cf12 \cb3 "Sounds/WhiteBloodCellDeath"\cf4 \cb3 , ofType: \cf12 \cb3 "wav"\cf4 \cb3 )\
+        
+\f1\b \cf5 \cb3 do
+\f0\b0 \cf4 \cb3  \{\
+            
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  newAudioPlayer = 
+\f1\b \cf5 \cb3 try
+\f0\b0 \cf4 \cb3  \cf9 \cb3 AVAudioPlayer\cf4 \cb3 (contentsOf: \cf8 \cb3 URL\cf4 \cb3 (fileURLWithPath: mDeathSound!))\
+            newAudioPlayer.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+            \cf13 \cb3 mCellDeathSoundPool\cf4 \cb3 .\cf11 \cb3 append\cf4 \cb3 (newAudioPlayer)\
+            \
+            
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  newAudioPlayer\
+        \} 
+\f1\b \cf5 \cb3 catch
+\f0\b0 \cf4 \cb3  \{\
+            \cf11 \cb3 print\cf4 \cb3 (error)\
+        \}\
+\
+        \cf11 \cb3 print\cf4 \cb3 (\cf12 \cb3 "Returning Element 0 of Sound System Pool - Failed to create new sound!"\cf4 \cb3 )\
+        \
+        
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  \cf13 \cb3 mCellDeathSoundPool\cf4 \cb3 [\cf15 \cb3 0\cf4 \cb3 ]\
+    \}\
+    \
+    \
+    \cf2 \cb3 //------------------------------------------------------------//\cf4 \cb3 \
+    \cf2 \cb3 //-------------------- System Functionality ------------------//\cf4 \cb3 \
+    \cf2 \cb3 //------------------------------------------------------------//\cf4 \cb3 \
+    \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 PlaySound\cf4 \cb3 (sound Sound: \cf8 \cb3 String\cf4 \cb3 )\
+    \{\
+        
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  \cf11 \cb3 !\cf13 \cb3 defaults\cf4 \cb3 .\cf11 \cb3 bool\cf4 \cb3 (forKey: \cf12 \cb3 "AudioToggleValue"\cf4 \cb3 ) \{ 
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  \}\
+        \
+        \cf9 \cb3 DispatchQueue\cf4 \cb3 .\cf11 \cb3 global\cf4 \cb3 ().\cf11 \cb3 async\cf4 \cb3  \{\
+        \
+            
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 self
+\f0\b0 \cf4 \cb3 .\cf13 \cb3 mSoundDict\cf4 \cb3 [Sound] \cf11 \cb3 !=\cf4 \cb3  
+\f1\b \cf5 \cb3 nil
+\f0\b0 \cf4 \cb3 \
+            \{\
+                
+\f1\b \cf5 \cb3 self
+\f0\b0 \cf4 \cb3 .\cf13 \cb3 mSoundDict\cf4 \cb3 [Sound]?.\cf11 \cb3 prepareToPlay\cf4 \cb3 ()\
+                
+\f1\b \cf5 \cb3 self
+\f0\b0 \cf4 \cb3 .\cf13 \cb3 mSoundDict\cf4 \cb3 [Sound]?.\cf11 \cb3 play\cf4 \cb3 ()\
+            \}\
+            \
+        \}\
+    \}\
+    \
+    
+\f1\b \cf5 \cb3 func
+\f0\b0 \cf4 \cb3  \cf7 \cb3 PlaySoundOverlap\cf4 \cb3 (sound Sound: \cf8 \cb3 String\cf4 \cb3 )\
+    \{\
+        
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  \cf11 \cb3 !\cf13 \cb3 defaults\cf4 \cb3 .\cf11 \cb3 bool\cf4 \cb3 (forKey: \cf12 \cb3 "AudioToggleValue"\cf4 \cb3 ) \{ 
+\f1\b \cf5 \cb3 return
+\f0\b0 \cf4 \cb3  \}\
+    \
+        \cf2 \cb3 /*\cf4 \cb3 \
+\cf2 \cb3          var mProjectileShotPool : [AVAudioPlayer] = []\cf4 \cb3 \
+\cf2 \cb3          var mCoinSoundPool : [AVAudioPlayer] = []\cf4 \cb3 \
+\cf2 \cb3          var mHitSoundPool : [AVAudioPlayer] = []\cf4 \cb3 \
+\cf2 \cb3          var mCellDeathSoundPool : [AVAudioPlayer] = []\cf4 \cb3 \
+\cf2 \cb3          */\cf4 \cb3 \
+        \cf9 \cb3 DispatchQueue\cf4 \cb3 .\cf11 \cb3 global\cf4 \cb3 ().\cf11 \cb3 async\cf4 \cb3  \{\
+            \
+            
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  Sound \cf11 \cb3 ==\cf4 \cb3  \cf12 \cb3 "Projectile Shot"\cf4 \cb3 \
+            \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  soundToPlay = 
+\f1\b \cf5 \cb3 self
+\f0\b0 \cf4 \cb3 .\cf14 \cb3 GetNextAvailableProjectileShotSound\cf4 \cb3 ()\
+                soundToPlay.\cf11 \cb3 play\cf4 \cb3 ()\
+            \}\
+            
+\f1\b \cf5 \cb3 else
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  Sound \cf11 \cb3 ==\cf4 \cb3  \cf12 \cb3 "Coin"\cf4 \cb3 \
+            \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  soundToPlay = 
+\f1\b \cf5 \cb3 self
+\f0\b0 \cf4 \cb3 .\cf14 \cb3 GetNextAvailableCoinSound\cf4 \cb3 ()\
+                soundToPlay.\cf11 \cb3 play\cf4 \cb3 ()\
+            \}\
+            
+\f1\b \cf5 \cb3 else
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  Sound \cf11 \cb3 ==\cf4 \cb3  \cf12 \cb3 "Hit"\cf4 \cb3 \
+            \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  soundToPlay = 
+\f1\b \cf5 \cb3 self
+\f0\b0 \cf4 \cb3 .\cf14 \cb3 GetNextAvailableHitSound\cf4 \cb3 ()\
+                soundToPlay.\cf11 \cb3 play\cf4 \cb3 ()\
+            \}\
+            
+\f1\b \cf5 \cb3 else
+\f0\b0 \cf4 \cb3  
+\f1\b \cf5 \cb3 if
+\f0\b0 \cf4 \cb3  Sound \cf11 \cb3 ==\cf4 \cb3  \cf12 \cb3 "Cell Death"\cf4 \cb3 \
+            \{\
+                
+\f1\b \cf5 \cb3 let
+\f0\b0 \cf4 \cb3  soundToPlay = 
+\f1\b \cf5 \cb3 self
+\f0\b0 \cf4 \cb3 .\cf14 \cb3 GetNextAvailableDeathSound\cf4 \cb3 ()\
+                soundToPlay.\cf11 \cb3 play\cf4 \cb3 ()\
+            \}\
+            
+\f1\b \cf5 \cb3 else
+\f0\b0 \cf4 \cb3 \
+            \{\
+                \cf11 \cb3 print\cf4 \cb3 (\cf12 \cb3 "Invalid Sound Name!"\cf4 \cb3 )\
+            \}\
+            \
+        \}\
+        \
+    \}\
+    \
+\}\
+}
