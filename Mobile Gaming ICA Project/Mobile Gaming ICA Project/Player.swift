@@ -15,9 +15,11 @@ class Player : Cell
     
     var mGameScene : GameScene!
     
+    //Player Alive and Speed Values
     var mAlive = false
     var mSpeed = Float(1)
-    
+
+    //Player Health and Energy
     var mHealth = CGFloat(100)
     {
         didSet
@@ -50,15 +52,19 @@ class Player : Cell
         }
     }
     
+    //Movement Direction
     var mMovementDirection : Vector2!
     
+    //ZRotation
     private var mRotationCounter = Float(0)
     
+    //Initialise Player with Cell back and front textures as well as a speed value
     init(back BackTex: String, front FrontTex: String, speed Speed: Float) {
         
         self.mAlive = false
         self.mSpeed = Speed
         
+        //Reset the movement direction
         self.mMovementDirection = Vector2(x: 0, y: 0)
         
         //Initialise Cell
@@ -67,14 +73,15 @@ class Player : Cell
     
     func InitialisePlayer(scene Scene: GameScene, name Name: String, zposition ZPosition: CGFloat)
     {
-        self.mAlive = false
-        self.mGameScene = Scene
+        self.mAlive = false //Set the player to not be alive
+        self.mGameScene = Scene //Store the game scene
         
-        self.mMovementDirection = Vector2(x: 0, y: 0)
+        self.mMovementDirection = Vector2(x: 0, y: 0) //Reset Movement Direction
         
-        self.mMaxHealth = 100
-        self.mHealth = self.mMaxHealth
+        self.mMaxHealth = 100 //Reset player max health
+        self.mHealth = self.mMaxHealth //Set Health
         
+        //Set Energy Values
         self.mMaxEnergy = 100
         self.mEnergy = 0
         
@@ -82,6 +89,7 @@ class Player : Cell
         super.InitialiseCell(scene: Scene, name: Name, zposition: ZPosition)
     }
     
+    //Spawn the player at a position with a specific size
     func SpawnPlayer(position Position: CGPoint, size Size: CGSize)
     {
         super.SetPosition(to: Position)
@@ -89,9 +97,10 @@ class Player : Cell
         
         self.mMovementDirection = Vector2(x: 0, y: 0)
         
-        self.mAlive = true
+        self.mAlive = true // Set player to be alive
     }
     
+    //Kill the player and reset position to asset waiting location
     func DestroyPlayer()
     {
         self.mAlive = false
@@ -131,6 +140,7 @@ class Player : Cell
         
         self.mMovementDirection = Vector2(x: 0, y: 0)
         
+        //Calculate New movement Direction
         self.mMovementDirection = Vector2(x: self.mMovementDirection.x + accVector.x, y: self.mMovementDirection.y + accVector.y)
         
         if Vector2.magnitude(v: self.mMovementDirection) < 0.1
@@ -144,6 +154,7 @@ class Player : Cell
         }*/
     }
     
+    //Lock player to screen bounds
     func LockToScreenBounds(pos Position: inout CGPoint)
     {
         let minXBound = 0 + (self.mCellBackground.size.width / 2)
@@ -152,6 +163,7 @@ class Player : Cell
         let minYBound = 0 + (self.mCellBackground.size.width / 2)
         let maxYBound = self.mGameScene.frame.maxY - (self.mCellBackground.size.height / 2)
         
+        //Check if player position is outside of the screen bounds
         if Position.x > maxXBound
         {
             Position.x = maxXBound
@@ -183,28 +195,19 @@ class Player : Cell
         {
             newMovementDirection = Vector2.normalise(v: newMovementDirection)
         }
-        
-        //print(self.mMovementDirection.x)
-        //print(self.mMovementDirection.y)
-        
+
+        //Move the player position in a specified direction using the player speed and delta time values
         let newX = super.GetPosition().x + CGFloat((newMovementDirection.x * DeltaTime) * self.mSpeed)
         let newY = super.GetPosition().y + CGFloat((newMovementDirection.y * DeltaTime) * self.mSpeed)
         
-        //print(String(Double(newX)) + "     " + String(Double(newY)) + "     " + String(Double(DeltaTime)))
-        
         var newPos = CGPoint(x: newX, y: newY)
-        
-        //print("Before")
-        //print(newPos)
-        
-        LockToScreenBounds(pos: &newPos)
-        
-        //print("After")
-        //print(newPos)
-        
+        LockToScreenBounds(pos: &newPos) //Lock player to screen positions
+
+        //Set player position
         super.SetPosition(to: newPos)
     }
     
+    //Set player background z rotation
     func RotateBackground(speed Speed: CGFloat)
     {
         let DeltaTime = Float(mGameScene.GetDeltaTime())

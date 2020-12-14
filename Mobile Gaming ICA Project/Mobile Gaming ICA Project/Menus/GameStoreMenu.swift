@@ -62,6 +62,7 @@ class GameStoreMenu
     
     func InitialiseStoreMenu()
     {
+        //Initialising default values for thhe Game Store Buttons / Images and Text
         mStoreMenubackground.position = CGPoint(x: self.mGameScene.frame.midX, y: self.mGameScene.frame.midY)
         mStoreMenubackground.size = CGSize(width: 0, height: 0)
         mStoreMenubackground.zPosition = 98
@@ -69,7 +70,7 @@ class GameStoreMenu
         mGameScene.addChild(self.mStoreMenubackground)
         
         MenuTitle.name = "MenuTitle"
-        MenuTitle.size = CGSize(width: self.mGameScene.frame.midX, height: self.mGameScene.frame.midX / 3)
+        MenuTitle.size = CGSize(width: (self.mGameScene.frame.height / 1.5), height: (self.mGameScene.frame.height / 3) / 1.5)
         MenuTitle.position = CGPoint(x: self.mGameScene.frame.midX, y: self.mGameScene.frame.maxY - MenuTitle.frame.height / 1.5)
         MenuTitle.zPosition = 99
         mGameScene.addChild(MenuTitle)
@@ -98,10 +99,11 @@ class GameStoreMenu
         //------------------------------------------------------------//
         //-------------------- Setting Up Store Buttons --------------//
         //------------------------------------------------------------//
-        
-        let ProjectileButtonsSize = CGFloat(100)
+
         let ScreenWidth = self.mGameScene.frame.maxX
         let ScreenHeight = self.mGameScene.frame.maxY
+        
+        let ProjectileButtonsSize = CGFloat(ScreenHeight / 5)
         
         mProjectileOneBuyButton.position = CGPoint(x: (ScreenWidth / 2) - ProjectileButtonsSize - 20, y: (ScreenHeight / 2))
         mProjectileOneBuyButton.zPosition = 100
@@ -161,6 +163,7 @@ class GameStoreMenu
         ToggleStoreMenu(to: false)
     }
     
+    //Toggle the Store menu to be open or closed
     func ToggleStoreMenu(to Value: Bool)
     {
         mGameScene.mStoreOpen = Value

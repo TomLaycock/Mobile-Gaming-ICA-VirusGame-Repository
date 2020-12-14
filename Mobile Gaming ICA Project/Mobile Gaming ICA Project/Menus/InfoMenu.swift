@@ -15,6 +15,9 @@ class InfoMenu
 
     var mMainMenu : MainMenu!
     
+    let DivisionFactor = 7
+    var mTextScale = CGFloat(0)
+    
     var mInfoMenuActive = false
     
     let mInfoMenuBackground = SKSpriteNode(imageNamed: "Assets/Squares/BlackSquare.jpg")
@@ -39,11 +42,14 @@ class InfoMenu
     func SetupInfoMenu(scene MainMenu: MainMenu) {
         self.mMainMenu = MainMenu
     }
-    
+
     func InitialiseInfoMenu()
     {
+        //Initialisng default values for buttons / images and text
         let ScreenWidth = self.mMainMenu.frame.maxX
         let ScreenHeight = self.mMainMenu.frame.maxY
+        
+        mTextScale = CGFloat(ScreenWidth / 32)
         
         mInfoMenuBackground.position = CGPoint(x: self.mMainMenu.frame.midX, y: self.mMainMenu.frame.midY)
         mInfoMenuBackground.size = CGSize(width: ScreenWidth, height: ScreenHeight)
@@ -53,7 +59,7 @@ class InfoMenu
         mInfoMenuBackground.isHidden = true
         
         MenuTitle.name = "MenuTitle"
-        MenuTitle.size = CGSize(width: self.mMainMenu.frame.midX * 1.5, height: self.mMainMenu.frame.midX / 3)
+        MenuTitle.size = CGSize(width: self.mMainMenu.frame.height, height: self.mMainMenu.frame.height / 5)
         MenuTitle.position = CGPoint(x: self.mMainMenu.frame.midX, y: self.mMainMenu.frame.maxY - MenuTitle.frame.height / 1.5)
         MenuTitle.zPosition = 99
         mMainMenu.addChild(MenuTitle)
@@ -78,10 +84,12 @@ class InfoMenu
         //------------------------------------------------------------//
         //-------------------- Setting Up Info Objects ---------------//
         //------------------------------------------------------------//
-        mEnergyBallInfoImage.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4), y: (ScreenHeight / 2) + ((self.mMainMenu.frame.width / 10) * 1))
+        let ImageWidth = (ScreenHeight / CGFloat(DivisionFactor))
+        
+        mEnergyBallInfoImage.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4), y: (ScreenHeight / 2) + (ImageWidth * 1))
         ApplyCommonSettingsToImage(to: mEnergyBallInfoImage)
 
-        mEnergyBallInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + (ScreenWidth / 10), y: (ScreenHeight / 2) + ((self.mMainMenu.frame.width / 10) * 1))
+        mEnergyBallInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + ImageWidth, y: (ScreenHeight / 2) + (ImageWidth * 1))
         mEnergyBallInfoText.text = "Eat Food to gain Energy!"
         ApplyCommonSettingsToText(to: mEnergyBallInfoText)
 
@@ -90,35 +98,38 @@ class InfoMenu
         mWhiteBloodCellInfoImage.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4), y: (ScreenHeight / 2))
         ApplyCommonSettingsToImage(to: mWhiteBloodCellInfoImage)
 
-        mWhiteBloodCellInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + (ScreenWidth / 10), y: (ScreenHeight / 2))
+        mWhiteBloodCellInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + ImageWidth, y: (ScreenHeight / 2))
         mWhiteBloodCellInfoText.text = "White Blood Cell - 1HP"
         ApplyCommonSettingsToText(to: mWhiteBloodCellInfoText)
         
         
         
-        mBossInfoImage.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4), y: (ScreenHeight / 2) - ((self.mMainMenu.frame.width / 10) * 1))
+        mBossInfoImage.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4), y: (ScreenHeight / 2) - (ImageWidth * 1))
         ApplyCommonSettingsToImage(to: mBossInfoImage)
 
-        mBossInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + (ScreenWidth / 10), y: (ScreenHeight / 2) - ((self.mMainMenu.frame.width / 10) * 1))
+        mBossInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + ImageWidth, y: (ScreenHeight / 2) - (ImageWidth * 1))
         mBossInfoText.text = "Boss White Blood Cell - 150HP"
         ApplyCommonSettingsToText(to: mBossInfoText)
         
         
         
-        mProjectileInfoImage.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4), y: (ScreenHeight / 2) - ((self.mMainMenu.frame.width / 10) * 2))
+        mProjectileInfoImage.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4), y: (ScreenHeight / 2) - (ImageWidth * 2))
         ApplyCommonSettingsToImage(to: mProjectileInfoImage)
 
-        mProjectileInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + (ScreenWidth / 10), y: (ScreenHeight / 2) - ((self.mMainMenu.frame.width / 10) * 2))
+        mProjectileInfoText.position = CGPoint(x: (ScreenWidth / 2) - (ScreenWidth / 4) + ImageWidth, y: (ScreenHeight / 2) - (ImageWidth * 2))
         mProjectileInfoText.text = "Fire these at White Blood Cells and Boss Cells!"
         ApplyCommonSettingsToText(to: mProjectileInfoText)
         
         ToggleInfoMenu(to: false)
     }
     
+    //Functions for applying common settings to each of the Images / Text / Buttons
     func ApplyCommonSettingsToImage(to Image: SKSpriteNode)
     {
+        let ImageWidth = (self.mMainMenu.frame.height / CGFloat(DivisionFactor))
+        
         Image.zPosition = 100
-        Image.size = CGSize(width: self.mMainMenu.frame.width / 10, height: self.mMainMenu.frame.width / 10)
+        Image.size = CGSize(width: ImageWidth, height: ImageWidth)
         Image.isUserInteractionEnabled = false
         Image.isHidden = true
         self.mMainMenu.addChild(Image)
@@ -126,7 +137,7 @@ class InfoMenu
     
     func ApplyCommonSettingsToText(to Text: SKLabelNode)
     {
-        Text.fontSize = 30
+        Text.fontSize = mTextScale
         Text.zPosition = 100
         Text.horizontalAlignmentMode = .left
         Text.verticalAlignmentMode = .center
@@ -135,6 +146,7 @@ class InfoMenu
         self.mMainMenu.addChild(Text)
     }
     
+    //Toggles Info menu to be open or closed
     func ToggleInfoMenu(to Value: Bool)
     {
         mInfoMenuActive = Value

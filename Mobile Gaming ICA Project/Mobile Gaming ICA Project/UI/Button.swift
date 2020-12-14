@@ -12,14 +12,14 @@ import AVFoundation
 
 class Button: SKSpriteNode {
     
-    var mButtonPosition = CGPoint(x: -100, y: 0)
+    var mButtonPosition = CGPoint(x: -100, y: 0) //Stored position for active button
     
     func SetButtonPosition(to position: CGPoint)
     {
         mButtonPosition = position
     }
     
-    func SetButtonState(value Toggle: Bool)
+    func SetButtonState(value Toggle: Bool) //Set buttons to be at inactive or active positions
     {
         if Toggle
         {

@@ -62,11 +62,14 @@ class WhiteBloodCell : Cell
         let CellHalfWidth = Int(self.mCellBackground.size.width / 2)
         let ScreenWidth = Int(mGameScene.frame.maxX)
         let ScreenHeight = Int(mGameScene.frame.maxY)
+
+        super.SetSize(to: Size)
         
         let RandAxis = Int.random(in: 0...1)
         
         var newPos = CGPoint(x: 0, y: 0)
 
+        //Finding a random position for the Cell to spawn
         if RandAxis == 0
         {
             let randomSide = Int.random(in: 0...1)
@@ -87,9 +90,9 @@ class WhiteBloodCell : Cell
         }
         
         super.SetPosition(to: newPos)
-        super.SetSize(to: Size)
     }
     
+    //Resets the White Blood Cell
     func DestroyWhiteBloodCell(playSound PlaySound: Bool)
     {
         if PlaySound
@@ -122,6 +125,7 @@ class WhiteBloodCell : Cell
         mSpeed = Speed
     }
         
+    //Move Cells by passed in vector
     func MoveBy(by Position: Vector2)
     {
         let currentPos = super.GetPosition()
@@ -134,6 +138,7 @@ class WhiteBloodCell : Cell
         super.SetPosition(to: newPos)
     }
     
+    //Moves the Cell towards the specified point
     func MoveTowards(target Target: CGPoint)
     {
         let CurrentPos = super.GetPosition()

@@ -24,6 +24,8 @@ class GameOver: SKScene {
     var mMainMenu : MainMenu!
     var mGameScene : GameScene!
     
+    var mTextScale = CGFloat(0)
+    
     //Detla Time Calculation
     var mDeltaTime = Double(0)
     var mPrevTime = Double(0)
@@ -55,39 +57,41 @@ class GameOver: SKScene {
         {
             mSoundSystem.SetupCustomSoundSystem()
         }
+        
+        mTextScale = CGFloat(frame.maxY / 32)
 
         //Initialising Scene Graphics
         mVictoryTitle.name = "VictoryTitle"
-        mVictoryTitle.size = CGSize(width: frame.midX, height: frame.midX / 3)
+        mVictoryTitle.size = CGSize(width: (frame.height / 1.5), height: (frame.height / 3) / 1.5)
         mVictoryTitle.position = CGPoint(x: frame.midX, y: frame.maxY - mVictoryTitle.frame.height / 1.5)
         mVictoryTitle.zPosition = 59
         mVictoryTitle.isHidden = false
         addChild(mVictoryTitle)
         
         mDefeatTitle.name = "DefeatTitle"
-        mDefeatTitle.size = CGSize(width: frame.midX, height: frame.midX / 3)
+        mDefeatTitle.size = CGSize(width: (frame.height / 1.5), height: (frame.height / 3) / 1.5)
         mDefeatTitle.position = CGPoint(x: frame.midX, y: frame.maxY - mDefeatTitle.frame.height / 1.5)
         mDefeatTitle.zPosition = 59
         mDefeatTitle.isHidden = false
         addChild(mDefeatTitle)
         
-        mFinalScore.fontSize = 50
-        mFinalScore.position = CGPoint(x: frame.midX, y: frame.midY)
+        let ButtonSize = frame.maxY / 6
+        mFinalScore.fontSize = mTextScale * 1.6
+        mFinalScore.position = CGPoint(x: frame.midX, y: frame.midY + (ButtonSize / 2))
         mFinalScore.zPosition = 59
         mFinalScore.horizontalAlignmentMode = .center
         mFinalScore.isUserInteractionEnabled = false
         mFinalScore.text = "FINAL SCORE: " + String(mFinalScoreValue)
         addChild(mFinalScore)
-        
-        let ButtonSize = frame.maxX / 6
-        mPlayAgainButton.position = CGPoint(x: frame.midX - ButtonSize * 1.5, y: frame.midY - ButtonSize * 1.2)
+
+        mPlayAgainButton.position = CGPoint(x: frame.midX - ButtonSize * 1.5, y: frame.midY - ButtonSize)
         mPlayAgainButton.zPosition = 90
         mPlayAgainButton.size = CGSize(width: ButtonSize, height: ButtonSize)
         mPlayAgainButton.name = "Play Again"
         mPlayAgainButton.SetButtonPosition(to: mPlayAgainButton.position)
         addChild(mPlayAgainButton)
 
-        mReturnToMenuButton.position = CGPoint(x: frame.midX + ButtonSize * 1.5, y: frame.midY - ButtonSize * 1.2)
+        mReturnToMenuButton.position = CGPoint(x: frame.midX + ButtonSize * 1.5, y: frame.midY - ButtonSize)
         mReturnToMenuButton.zPosition = 90
         mReturnToMenuButton.size = CGSize(width: ButtonSize, height: ButtonSize)
         mReturnToMenuButton.name = "Return To Main Menu"

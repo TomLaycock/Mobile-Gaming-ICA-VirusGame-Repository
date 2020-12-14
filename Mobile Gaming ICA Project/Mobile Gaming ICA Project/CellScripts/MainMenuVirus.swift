@@ -28,6 +28,7 @@ class MainMenuVirus : Cell
         super.init(back: BackTex, front: FrontTex)
     }
     
+    //Initialising Main Menu Viruses
     func InitialiseMainMenuVirus(scene Scene: MainMenu, zposition ZPosition: CGFloat)
     {
         self.mMainMenu = Scene
@@ -51,6 +52,7 @@ class MainMenuVirus : Cell
         mSpeed = Speed
     }
         
+    //Move Cell Down the screen
     func Move()
     {
         let currentPos = super.GetPosition()
@@ -61,6 +63,7 @@ class MainMenuVirus : Cell
         super.SetPosition(to: newPos)
     }
     
+    //Sets Cell Alpha value based on vertical screen position
     func UpdateAlpha()
     {
         var newAlphaValue = -0.35 + (super.mCellBackground.position.y / mMainMenu.frame.maxY)
@@ -72,6 +75,7 @@ class MainMenuVirus : Cell
         super.mCellForeground.alpha = newAlphaValue
     }
     
+    //Rotate Cell background
     func RotateBackground(rotationSpeed Speed: Float)
     {
         let DeltaTime = Float(mMainMenu.GetDeltaTime())
@@ -79,6 +83,7 @@ class MainMenuVirus : Cell
         mRotationCounter = Float(mRotationCounter) + (Speed * DeltaTime)
     }
     
+    //Check if cell is off bottom of screen
     func CheckBottomOfScreen()
     {
         if super.mCellBackground.position.y < -super.mCellBackground.size.height
@@ -87,6 +92,7 @@ class MainMenuVirus : Cell
         }
     }
     
+    //Updates Menu Cell Background
     func Update(rotationSpeed Speed: Float)
     {
         Move()

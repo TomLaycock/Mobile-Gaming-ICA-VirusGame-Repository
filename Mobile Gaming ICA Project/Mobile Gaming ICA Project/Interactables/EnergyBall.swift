@@ -14,10 +14,12 @@ class EnergyBall : SKSpriteNode {
 
     var mGameScene : GameScene!
     
+    //Energy Ball Values
     var mEnergyToProvide = 0
     var mAlive = false
     var mUniqueID = -1
     
+    //Checks for collisions with other Energy balls to prevent spawning inside of another
     func CheckCollisionWithOtherEnergyCells(otherCells Cells: [EnergyBall]) -> Bool
     {
         for EnergyBallInstance in Cells
@@ -39,8 +41,18 @@ class EnergyBall : SKSpriteNode {
         self.mUniqueID = Value
     }
     
+    //Spawns energy ball with a specific amount of energy
     func Spawn(with Energy: Int, otherCells Cells: [EnergyBall])
     {
+        
+        let EnergySize = CGFloat(Energy) * (self.mGameScene.frame.maxY / 50)
+        
+        //Setting Energy Ball Defaults
+        self.name = "EnergyBall"
+        self.size = CGSize(width: EnergySize, height: EnergySize)
+        self.zPosition = 5
+        self.mEnergyToProvide = Energy
+        self.mAlive = true
         
         var newPos = CGPoint(x: Int.random(in: 10...Int(mGameScene.frame.maxX - 10)), y: Int.random(in: 10...Int(mGameScene.frame.maxY - 10)))
         
@@ -49,17 +61,12 @@ class EnergyBall : SKSpriteNode {
         }
         
         self.position = newPos
-        
-        self.name = "EnergyBall"
-        self.size = CGSize(width: CGFloat(Energy * 10), height: CGFloat(Energy * 10))
-        self.zPosition = 5
-        self.mEnergyToProvide = Energy
-        self.mAlive = true
     }
     
+    //Initialising energy ball
     func InitialiseEnergyBall(scene Scene: GameScene)
     {
-        self.mGameScene = Scene
+        self.mGameScene = Scene //Storing Game Scene
         
         self.name = "EnergyBall"
         self.position = CGPoint(x: -100, y: 0)
@@ -69,6 +76,7 @@ class EnergyBall : SKSpriteNode {
         Scene.addChild(self)
     }
     
+    //Consumes the Energy Ball resetting its values
     func Consume()
     {
         if let mCollectParticle = SKEmitterNode(fileNamed: "CollectParticle")
@@ -94,6 +102,7 @@ class EnergyBall : SKSpriteNode {
         return self.mAlive
     }
     
+    //Checks for collisions with player giving the player some score and some energy
     func CheckCollisionWithPlayer(player Player: Player)
     {
         if Vector2.magnitude(v: Vector2(CGPoint: Player.GetPosition()) - Vector2(CGPoint: self.position)) < Player.mCellBackground.size.width / 2

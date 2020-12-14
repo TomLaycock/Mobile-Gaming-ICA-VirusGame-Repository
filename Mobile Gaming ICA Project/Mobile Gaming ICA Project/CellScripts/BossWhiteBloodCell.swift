@@ -42,6 +42,7 @@ class BossWhiteBloodCell : WhiteBloodCell
         }
     }
     
+    //Initialising Boss White Blood Cell Default Values
     func InitialiseBossWhiteBloodCell(scene Scene: GameScene, name Name: String, zposition ZPosition: CGFloat)
     {
         mBossMaxHealth = 150

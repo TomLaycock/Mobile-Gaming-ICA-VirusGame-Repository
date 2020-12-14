@@ -15,6 +15,7 @@ class PoolSystem
     
     var mGameScene : GameScene!
     
+    //Object Pools
     var mEnergyBallPool : [EnergyBall] = []
     var mWhiteBloodCellPool : [WhiteBloodCell] = []
     var mProjectileOnePool : [Projectile] = []
@@ -27,6 +28,8 @@ class PoolSystem
     func SetupPoolSystem(scene Scene: GameScene)
     {
         self.mGameScene = Scene
+        
+        //Creating intial contents of each pool
         
         for _ in 1...20
         {
@@ -69,6 +72,7 @@ class PoolSystem
     
     func ReInitialise()
     {
+        //Initialises pools at start of game scene
         for ball in self.mEnergyBallPool
         {
             ball.InitialiseEnergyBall(scene: self.mGameScene)
@@ -97,7 +101,7 @@ class PoolSystem
     
     func ResetPools()
     {
-        
+        //Resets Objects in each pool
         for ball in self.mEnergyBallPool
         {
             ball.Consume()

@@ -164,29 +164,14 @@
 				E25FEB3A257AD787000E3C04 /* Particles */,
 				E210E8282577F8C3008CF32B /* Sounds */,
 				E210E8032577F783008CF32B /* Assets */,
+				E24AA0F62587C7C300B0D279 /* Scenes */,
+				E24AA0F82587C7EF00B0D279 /* Menus */,
+				E24AA0F72587C7DD00B0D279 /* Systems */,
+				E24AA0F92587C80400B0D279 /* UI */,
+				E24AA0FA2587C81A00B0D279 /* CellScripts */,
+				E24AA0FB2587C83100B0D279 /* Interactables */,
 				E2A2E28D2582B708002BF237 /* GameViewController.swift */,
-				E210E80C2577F83F008CF32B /* MainMenu.sks */,
-				E210E8062577F7FE008CF32B /* MainMenu.swift */,
-				E210E8122577F840008CF32B /* GameScene.sks */,
-				E210E80B2577F83F008CF32B /* GameScene.swift */,
-				E2A2E28B2582B6C8002BF237 /* GameOver.sks */,
-				E2A2E28F2582B730002BF237 /* GameOver.swift */,
-				E2970A7C25868B0600926130 /* InfoMenu.swift */,
-				E210E8102577F840008CF32B /* PoolSystem.swift */,
-				E2AF4FD8257D72D000FE6430 /* CustomSoundSystem.swift */,
-				E2AF4FD4257D4E0000FE6430 /* MainOptionsMenu.swift */,
-				E25FEB36257ABEF0000E3C04 /* GameStoreMenu.swift */,
-				E2AF4FD2257D1E7700FE6430 /* OptionsMenu.swift */,
-				E210E80A2577F83F008CF32B /* Button.swift */,
-				E210E8082577F83F008CF32B /* Cell.swift */,
-				E210E80E2577F83F008CF32B /* EnergyBall.swift */,
-				E2787E1D257ED598008E95C3 /* Projectile.swift */,
-				E210E80F2577F840008CF32B /* NumberBar.swift */,
-				E2787E1F257EE719008E95C3 /* MainMenuVirus.swift */,
 				E210E80D2577F83F008CF32B /* Player.swift */,
-				E210E8092577F83F008CF32B /* Utility.swift */,
-				E210E8132577F840008CF32B /* WhiteBloodCell.swift */,
-				E26360D72580527600D948EA /* BossWhiteBloodCell.swift */,
 				E210E7C32577F689008CF32B /* AppDelegate.swift */,
 				E210E7C72577F689008CF32B /* Actions.sks */,
 				E210E7CD2577F689008CF32B /* Main.storyboard */,
@@ -221,6 +206,69 @@
 				E210E7F82577F6B1008CF32B /* AVFoundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E24AA0F62587C7C300B0D279 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				E210E80C2577F83F008CF32B /* MainMenu.sks */,
+				E210E8062577F7FE008CF32B /* MainMenu.swift */,
+				E210E8122577F840008CF32B /* GameScene.sks */,
+				E210E80B2577F83F008CF32B /* GameScene.swift */,
+				E2A2E28B2582B6C8002BF237 /* GameOver.sks */,
+				E2A2E28F2582B730002BF237 /* GameOver.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		E24AA0F72587C7DD00B0D279 /* Systems */ = {
+			isa = PBXGroup;
+			children = (
+				E210E8102577F840008CF32B /* PoolSystem.swift */,
+				E2AF4FD8257D72D000FE6430 /* CustomSoundSystem.swift */,
+			);
+			path = Systems;
+			sourceTree = "<group>";
+		};
+		E24AA0F82587C7EF00B0D279 /* Menus */ = {
+			isa = PBXGroup;
+			children = (
+				E2970A7C25868B0600926130 /* InfoMenu.swift */,
+				E2AF4FD4257D4E0000FE6430 /* MainOptionsMenu.swift */,
+				E25FEB36257ABEF0000E3C04 /* GameStoreMenu.swift */,
+				E2AF4FD2257D1E7700FE6430 /* OptionsMenu.swift */,
+			);
+			path = Menus;
+			sourceTree = "<group>";
+		};
+		E24AA0F92587C80400B0D279 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				E210E80A2577F83F008CF32B /* Button.swift */,
+				E210E80F2577F840008CF32B /* NumberBar.swift */,
+				E210E8092577F83F008CF32B /* Utility.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		E24AA0FA2587C81A00B0D279 /* CellScripts */ = {
+			isa = PBXGroup;
+			children = (
+				E210E8082577F83F008CF32B /* Cell.swift */,
+				E2787E1F257EE719008E95C3 /* MainMenuVirus.swift */,
+				E210E8132577F840008CF32B /* WhiteBloodCell.swift */,
+				E26360D72580527600D948EA /* BossWhiteBloodCell.swift */,
+			);
+			path = CellScripts;
+			sourceTree = "<group>";
+		};
+		E24AA0FB2587C83100B0D279 /* Interactables */ = {
+			isa = PBXGroup;
+			children = (
+				E210E80E2577F83F008CF32B /* EnergyBall.swift */,
+				E2787E1D257ED598008E95C3 /* Projectile.swift */,
+			);
+			path = Interactables;
 			sourceTree = "<group>";
 		};
 		E25FEB3A257AD787000E3C04 /* Particles */ = {

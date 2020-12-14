@@ -37,6 +37,7 @@ class MainMenu: SKScene {
     
     override func didMove(to view: SKView) {
 
+        //Initialising the Main Menu Images / Button and Text
         mOptionsMenuActive = false
         
         if !mSceneLoadingComplete
@@ -73,7 +74,7 @@ class MainMenu: SKScene {
         
         let MenuTitle = SKSpriteNode(imageNamed: mGameTitle)
         MenuTitle.name = "MenuTitle"
-        MenuTitle.size = CGSize(width: frame.midX, height: frame.midX / 3)
+        MenuTitle.size = CGSize(width: (frame.height / 1.5), height: (frame.height / 3) / 1.5)
         MenuTitle.position = CGPoint(x: frame.midX, y: frame.maxY - MenuTitle.frame.height / 1.5)
         MenuTitle.zPosition = 59
         
@@ -84,7 +85,7 @@ class MainMenu: SKScene {
         for ButtonName in mButtons {
             let MenuButton = Button(imageNamed: "Assets/MenuButtons/" + ButtonName)
             MenuButton.name = ButtonName
-            MenuButton.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
+            MenuButton.size = CGSize(width: frame.height / 5, height: frame.height / 5)
             MenuButton.position = CGPoint(x: frame.midX + (Offset * MenuButton.frame.width * 1.2), y: frame.midY - MenuButton.frame.height / 2)
             MenuButton.zPosition = 60
             MenuButton.SetButtonPosition(to: MenuButton.position)
@@ -99,15 +100,6 @@ class MainMenu: SKScene {
         mSceneLoadingComplete = true
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        /*for touch in touches
-        {
-            let location = touch.location(in: self)
-            let touchedNode = atPoint(location)
-            
-        }*/
-    }
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches
         {
@@ -116,7 +108,7 @@ class MainMenu: SKScene {
             
             if !mOptionsMenuActive && !mInfoMenu.mInfoMenuActive
             {
-                if touchedNode.name == mButtons[0]
+                if touchedNode.name == mButtons[0] //Play Button
                 {
                     removeAllChildren()
                     
@@ -124,7 +116,7 @@ class MainMenu: SKScene {
                     mGameScene.scaleMode = .resizeFill
                     view?.presentScene(mGameScene, transition: .fade(withDuration: 0.5))
                 }
-                if touchedNode.name == mButtons[1]
+                if touchedNode.name == mButtons[1] //Options Button
                 {
                     mSoundSystem.PlaySound(sound: "Button Zero", scene: self)
                     mOptionsMenuActive = true
@@ -145,6 +137,7 @@ class MainMenu: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
      
+        //Calculates Delta Time
         if(mDeltaTime == 0)
         {
             mDeltaTime = Double(0.015)
@@ -156,6 +149,7 @@ class MainMenu: SKScene {
             mPrevTime = currentTime
         }
         
+        //Moves Viruses down the screen
         for virus in self.mViruses
         {
             virus.Update(rotationSpeed: 2)

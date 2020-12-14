@@ -21,6 +21,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Setting save defaults
         if !defaults.bool(forKey: "FirstTimeLoad")
         {
             defaults.set(true, forKey: "FirstTimeLoad")
@@ -30,6 +31,7 @@ class GameViewController: UIViewController {
         
         if let view = self.view as! SKView? {
             
+            //Create each of the scenes
             if let scene = MainMenu(fileNamed: "MainMenu")
             {
                 mMainMenuScene = scene
@@ -48,6 +50,7 @@ class GameViewController: UIViewController {
                 scene.scaleMode = .resizeFill
             }
             
+            //Store the scenes in each other scene
             mMainMenuScene.mGameScene = mGameScene
             
             mGameScene.mMainMenuScene = mMainMenuScene
@@ -56,7 +59,7 @@ class GameViewController: UIViewController {
             mGameOver.mGameScene = mGameScene
             mGameOver.mMainMenu = mMainMenuScene
             
-            view.presentScene(mMainMenuScene, transition: .fade(withDuration: 0.5))
+            view.presentScene(mMainMenuScene, transition: .fade(withDuration: 0.5)) //Load the main menu
             
             view.ignoresSiblingOrder = true
             view.showsFPS = true
@@ -80,6 +83,7 @@ class GameViewController: UIViewController {
         return true
     }
     
+    //Shake the device to run the Game Scene Shake function
     override func motionBegan(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             if let skView = view as? SKView, let scene = skView.scene as? GameScene {

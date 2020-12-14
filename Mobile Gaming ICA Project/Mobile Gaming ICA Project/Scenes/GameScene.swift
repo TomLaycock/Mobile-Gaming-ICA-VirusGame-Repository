@@ -26,6 +26,10 @@ class GameScene: SKScene
     var mDeltaTime = Double(0)
     var mPrevTime = Double(0)
     
+    var mTextScale = CGFloat(0)
+    var mCellSize = CGFloat(0)
+    var mGameMovementPercentage = CGFloat(1)
+    
     //Touch Values
     var mHoldingTouch = false
     var mPurchaseTimer = CGFloat(0)
@@ -167,22 +171,16 @@ class GameScene: SKScene
             mPoolSystem.ReInitialise()
             print("Re Initialising Pool System")
         }
-
-        /*for _ in 1...10
-        {
-            let EnergyToSpawn = mPoolSystem.GetNextAvailableEnergyBall()
-            EnergyToSpawn.Spawn(with: Int.random(in: 1...5), otherCells: mPoolSystem.GetEnergyBalls())
-        }
-        
-        for _ in 1...3
-        {
-            let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
-            WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: 100, height: 100), otherCells: mPoolSystem.GetWhiteBloodCells())
-            WhiteBloodCell.SetSpeed(to: Float(Int.random(in: 60...100)))
-        }*/
         
         print("Pool System Object Requests Complete")
         
+        //Setting Default Values For Buttons / Images / Text and objects
+        mTextScale = CGFloat(frame.width / 32)
+        mCellSize = CGFloat(frame.height / 7)
+        
+        print(frame.height / 7)
+        mGameMovementPercentage = CGFloat((frame.height / 7) / 100)
+
         //Initialising Store Menu
         if !mGameSetupComplete
         {
@@ -203,8 +201,8 @@ class GameScene: SKScene
         mBossSpawned = false
         
         mPlayer.InitialisePlayer(scene: self, name: "Player", zposition: 8)
-        mPlayer.SpawnPlayer(position: CGPoint(x: frame.midX, y: frame.midY), size: CGSize(width: 100, height: 100))
-        mPlayer.SetSpeed(to: 200)
+        mPlayer.SpawnPlayer(position: CGPoint(x: frame.midX, y: frame.midY), size: CGSize(width: mCellSize, height: mCellSize))
+        mPlayer.SetSpeed(to: Float(mGameMovementPercentage * 200))
         
         //Touch to start
         mTouchToStartBackground.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -213,8 +211,8 @@ class GameScene: SKScene
         mTouchToStartBackground.alpha = 0.8
         addChild(mTouchToStartBackground)
         
-        mTouchInstruction.fontSize = 72
-        mTouchInstruction.position = CGPoint(x: frame.midX, y: frame.maxY - 150)
+        mTouchInstruction.fontSize = mTextScale * 2
+        mTouchInstruction.position = CGPoint(x: frame.midX, y: frame.midY + (frame.maxY / 7))
         mTouchInstruction.text = "Touch Button to Start!"
         mTouchInstruction.zPosition = 201
         mTouchInstruction.horizontalAlignmentMode = .center
@@ -222,7 +220,7 @@ class GameScene: SKScene
         addChild(mTouchInstruction)
         
         mTouchToStart.name = "Touch To Start"
-        mTouchToStart.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
+        mTouchToStart.size = CGSize(width: frame.maxY / 5, height: frame.maxY / 5)
         mTouchToStart.position = CGPoint(x: frame.midX, y: frame.midY)
         mTouchToStart.SetButtonPosition(to: mTouchToStart.position)
         mTouchToStart.SetButtonState(value: true)
@@ -231,7 +229,7 @@ class GameScene: SKScene
         
         //Creating MainMenu Buttons
         mPauseMenuTitle.name = "MenuTitle"
-        mPauseMenuTitle.size = CGSize(width: frame.midX, height: frame.midX / 3)
+        mPauseMenuTitle.size = CGSize(width: (frame.height / 1.5), height: (frame.height / 3) / 1.5)
         mPauseMenuTitle.position = CGPoint(x: -1000, y: 0)
         mPauseMenuTitle.zPosition = 99
         addChild(mPauseMenuTitle)
@@ -244,7 +242,7 @@ class GameScene: SKScene
         addChild(mPauseButton)
 
         mResumeButton.name = mButtons[0]
-        mResumeButton.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
+        mResumeButton.size = CGSize(width: frame.maxY / 5, height: frame.maxY / 5)
         mResumeButton.position = CGPoint(x: frame.midX + (-1 * mResumeButton.frame.width * 2), y: frame.midY)
         mResumeButton.SetButtonPosition(to: mResumeButton.position)
         mResumeButton.SetButtonState(value: false)
@@ -252,7 +250,7 @@ class GameScene: SKScene
         addChild(mResumeButton)
         
         mOptionsButton.name = mButtons[1]
-        mOptionsButton.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
+        mOptionsButton.size = CGSize(width: frame.maxY / 5, height: frame.maxY / 5)
         mOptionsButton.position = CGPoint(x: frame.midX + (0 * mOptionsButton.frame.width * 2), y: frame.midY)
         mOptionsButton.SetButtonPosition(to: mOptionsButton.position)
         mOptionsButton.SetButtonState(value: false)
@@ -260,7 +258,7 @@ class GameScene: SKScene
         addChild(mOptionsButton)
         
         mReturnToMainMenuButton.name = mButtons[2]
-        mReturnToMainMenuButton.size = CGSize(width: frame.maxX / 6, height: frame.maxX / 6)
+        mReturnToMainMenuButton.size = CGSize(width: frame.maxY / 5, height: frame.maxY / 5)
         mReturnToMainMenuButton.position = CGPoint(x: frame.midX + (1 * mReturnToMainMenuButton.frame.width * 2), y: frame.midY)
         mReturnToMainMenuButton.SetButtonPosition(to: mReturnToMainMenuButton.position)
         mReturnToMainMenuButton.SetButtonState(value: false)
@@ -274,7 +272,7 @@ class GameScene: SKScene
         addChild(mPauseBackground)
         
         //Game UI
-        mScoreLabel.fontSize = 72
+        mScoreLabel.fontSize = mTextScale * 2
         mScoreLabel.position = CGPoint(x: frame.midX, y: 20)
         mScoreLabel.text = "SCORE: 0"
         mScoreLabel.zPosition = 100
@@ -352,23 +350,26 @@ class GameScene: SKScene
         mSelectedProjectileText.isUserInteractionEnabled = false
         addChild(mSelectedProjectileText)
         
-        //Alternate Controls
+        //Alternate Controls - Setup for positions - scales
+        let ShakeButtonSize = frame.maxY / 7
+        
         mShakeControl.position = CGPoint(x: 0 + 50, y: frame.midY)
         mShakeControl.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         mShakeControl.zPosition = 91
-        mShakeControl.size = CGSize(width: 100, height: 100)
+        mShakeControl.size = CGSize(width: ShakeButtonSize, height: ShakeButtonSize)
         mShakeControl.name = "Alt Shake Button"
         mShakeControl.isHidden = true
         addChild(mShakeControl)
         
+        let DirectionButtonSize = frame.maxY / 12
         var DirectionCounter = 0
         for direction in mDirectionArray
         {
             direction.anchorPoint = CGPoint(x: 0.5, y: 2)
-            direction.position = CGPoint(x: frame.maxX - 100, y: frame.midY)
+            direction.position = CGPoint(x: frame.maxX - (frame.maxY / 7), y: frame.midY)
             direction.zPosition = 91
             direction.zRotation = CGFloat(GLKMathDegreesToRadians(Float(45 * DirectionCounter)))
-            direction.size = CGSize(width: 60, height: 40)
+            direction.size = CGSize(width: DirectionButtonSize, height: DirectionButtonSize * 0.66)
             direction.name = mDirectionNames[DirectionCounter]
             direction.isHidden = true
             addChild(direction)
@@ -377,7 +378,7 @@ class GameScene: SKScene
         }
         
         //Round UI
-        mRoundText.fontSize = 30
+        mRoundText.fontSize = mTextScale
         mRoundText.position = CGPoint(x: frame.midX - 50, y: frame.maxY - 50)
         mRoundText.zPosition = 91
         mRoundText.horizontalAlignmentMode = .center
@@ -400,6 +401,7 @@ class GameScene: SKScene
         mGameSetupComplete = true
     }
     
+    //Toggles the Visibility of Alternate controls
     func ToggleAlternateControlView(to Value: Bool)
     {
         mShakeControl.isHidden = !Value
@@ -410,6 +412,7 @@ class GameScene: SKScene
         }
     }
 
+    //Returns next available projectile for currently selected projectile type
     func GetNextProjectile() -> Projectile
     {
         if mSelectedProjectile == 0
@@ -444,9 +447,11 @@ class GameScene: SKScene
         }
     }
     
+    //Perform swipe for firing projectile
     func SwipePerformed() -> Bool
     {
         
+        //Checking swipe dist and values
         let SwipeRequiredDist = CGFloat(20)
         let SwipeDist = Vector2.magnitude(v: Vector2(CGPoint: mTouchPointTwo) - Vector2(CGPoint: mTouchPointOne))
         
@@ -517,6 +522,7 @@ class GameScene: SKScene
             
             mHoldingTouch = false;
             
+            //Checking start game touch
             if !mGameStarted
             {
                 if touchedNode.name == "Touch To Start"
@@ -530,6 +536,7 @@ class GameScene: SKScene
                 return
             }
             
+            //Checking game swipe feature
             if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
             {
                 mTouchPointTwo = location
@@ -599,17 +606,17 @@ class GameScene: SKScene
                 }
             }
             
+            //Updating Game Sub Menus
             if !mGamePaused
             {
                 let NodePressedName = String(touchedNode.name ?? "None")
-
-                mStoreMenu.UpdateStoreMenu(pressed: NodePressedName)
+                mStoreMenu.UpdateStoreMenu(pressed: NodePressedName) //Store Menu
             }
 
             if mGameOptionsMenu
             {
                 let NodePressedName = String(touchedNode.name ?? "None")
-                mOptionsMenu.UpdateOptionsMenu(pressed: NodePressedName)
+                mOptionsMenu.UpdateOptionsMenu(pressed: NodePressedName) //options Menu
             }
             
             //If player has chosen to use touch controls instead
@@ -675,32 +682,14 @@ class GameScene: SKScene
                         mPlayer.SetPlayerMovementDirection(to: Vector2.normalise(v: Vector2(x: -1, y: -1)))
                     }
                 }
-                
-                /*
-                 "Alt Down Button",
-                 "Alt Left Down Button",
-                 "Alt Left Button",
-                 "Alt Left Up Button",
-                 "Alt Up Button",
-                 "Alt Right Up Button",
-                 "Alt Right Button",
-                 "Alt Right Down Button"
-                 */
             }
         }
-    }
-    
-    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
     }
     
     override func update(_ currentTime: TimeInterval)
     {
         
+        //Checks if the Game has Ended
         if mGameOver
         {
             mGameOverTimer = mGameOverTimer + Float(mDeltaTime)
@@ -715,6 +704,7 @@ class GameScene: SKScene
                     ResetGameScene()
                     removeAllChildren()
 
+                    //Switching to Game over Scene
                     mGameOverScene.scaleMode = .resizeFill
                     view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
                 }
@@ -727,6 +717,7 @@ class GameScene: SKScene
                     ResetGameScene()
                     removeAllChildren()
 
+                    //Switching to Game over Scene
                     mGameOverScene.scaleMode = .resizeFill
                     view?.presentScene(mGameOverScene, transition: .fade(withDuration: 0.5))
                 }
@@ -735,12 +726,14 @@ class GameScene: SKScene
             return
         }
         
+        //Checks if player has died
         if mPlayer.mHealth <= 0
         {
-            mPlayer.DestroyPlayer()
+            mPlayer.DestroyPlayer() //Removes player
             
-            mSoundSystem.PlaySound(sound: "Cell Death", scene: self)
+            mSoundSystem.PlaySound(sound: "Cell Death", scene: self) //Plays Death Sound
             
+            //Starts Shake particle for Game Over Effect
             if let mShakeParticle = SKEmitterNode(fileNamed: "ShakeEffect")
             {
                 mShakeParticle.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -755,6 +748,7 @@ class GameScene: SKScene
         
         if mRoundNumber == mBossRoundNumber && !mBossWhiteBloodCell.GetAlive() && mBossWhiteBloodCell.GetHealth() <= 0
         {
+            //Starts Shake particle for Game Over Effect
             if let mShakeParticle = SKEmitterNode(fileNamed: "ShakeEffect")
             {
                 mShakeParticle.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -767,6 +761,7 @@ class GameScene: SKScene
             mGameOver = true
         }
         
+        //Calculating Delta Time
         if(mDeltaTime == 0)
         {
             mDeltaTime = Double(0.015)
@@ -785,6 +780,7 @@ class GameScene: SKScene
             return
         }
         
+        //Updates the Store Menu and Holding Purchase Timers
         if mStoreOpen && !mGamePaused
         {
             if mHoldingTouch
@@ -814,6 +810,7 @@ class GameScene: SKScene
             }
         }
         
+        //if the Game has not Ended - Been Paused - Store is not Open and The Options menu is closed
         if(!mGamePaused && !mStoreOpen && !mGameOptionsMenu)
         {
             
@@ -836,6 +833,7 @@ class GameScene: SKScene
                 mRoundTimeRemaining = mRoundTimeRemaining - 1
             }
             
+            //Spawns more white blood cells if the round requires more
             if (mNumberOfCellsSpawned < mNumberOfVirusesToSpawnPerRound && mRoundNumber < mBossRoundNumber)
             {
                 mVirusSpawnTimer = mVirusSpawnTimer + Float(mDeltaTime)
@@ -847,17 +845,19 @@ class GameScene: SKScene
                     mVirusSpawnTimer = 0
                     
                     let WhiteBloodCell = mPoolSystem.GetNextAvailableWhiteBloodCell()
-                    WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: 100, height: 100), otherCells: mPoolSystem.GetWhiteBloodCells())
-                    WhiteBloodCell.SetSpeed(to: Float(Int.random(in: 60...100)))
+                    WhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: mCellSize, height: mCellSize), otherCells: mPoolSystem.GetWhiteBloodCells())
+                    WhiteBloodCell.SetSpeed(to: Float(mGameMovementPercentage * CGFloat(Int.random(in: 60...100))))
                     
                     SetRoundInformation()
                 }
             }
             
+            //If the final round is active spawn the boss white blood cell
             if mRoundNumber == mBossRoundNumber && !mBossSpawned
             {
                 mBossSpawned = true
-                mBossWhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: frame.maxX / 5, height: frame.maxX / 5), otherCells: mPoolSystem.GetWhiteBloodCells())
+                mBossWhiteBloodCell.SpawnWhiteBloodCell(size: CGSize(width: mCellSize * 2, height: mCellSize * 2), otherCells: mPoolSystem.GetWhiteBloodCells())
+                mBossWhiteBloodCell.SetSpeed(to: Float(mGameMovementPercentage * 120))
             }
             
             //If Device motion Controlls Are Enabled
@@ -963,6 +963,7 @@ class GameScene: SKScene
         
     }
     
+    //Opening / Closing the pause menu
     func TogglePauseMenu()
     {
         mGamePaused = !mGamePaused
@@ -987,6 +988,7 @@ class GameScene: SKScene
         }
     }
     
+    //Open / Close pause menu with provded value
     func TogglePauseMenuSpecifc(to Value: Bool)
     {
         mGamePaused = Value
@@ -1011,6 +1013,7 @@ class GameScene: SKScene
         }
     }
     
+    //Resets game values ready to be played again
     func ResetGameScene()
     {
         mGameStarted = false
@@ -1046,6 +1049,7 @@ class GameScene: SKScene
         return self.mDeltaTime
     }
  
+    //Performs the shake functionality destroying all White Blood Cells and Damaging the Boss White Blood Cell
     func ShakeDevice()
     {
         if mPlayer.GetEnergy() >= mPlayer.GetMaxEnergy()

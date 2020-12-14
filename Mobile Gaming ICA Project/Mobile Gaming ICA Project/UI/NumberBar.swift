@@ -23,6 +23,7 @@ class NumberBar {
     
     let mBarValueDisplay = SKLabelNode(fontNamed: "HelveticaNeue-Bold")
     
+    //Sets default values for the Number bars
     init(Start StartingValue: Int, Max MaxValue: Int, BackPath BackgroundImagePath: String, ForePath ForegroundImagePath: String, Lentgh MaxLentgh: CGFloat, Height MaxHeight: CGFloat)
     {
         mCurrentNumber = StartingValue
